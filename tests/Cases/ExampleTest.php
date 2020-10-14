@@ -11,6 +11,8 @@ declare(strict_types=1);
  */
 namespace HyperfTest\Cases;
 
+use Hyperf\Engine\Constant;
+
 /**
  * @internal
  * @coversNothing
@@ -22,5 +24,7 @@ class ExampleTest extends AbstractTestCase
         $this->assertTrue(true);
 
         $this->assertTrue(extension_loaded('swoole'));
+
+        $this->assertSame('Swoole', Constant::ENGINE);
     }
 }
