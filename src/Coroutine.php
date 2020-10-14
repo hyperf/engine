@@ -32,7 +32,7 @@ class Coroutine implements CoroutineInterface
         $this->callable = $callable;
     }
 
-    public static function run(callable $callable, ...$data)
+    public static function create(callable $callable, ...$data)
     {
         $coroutine = new static($callable);
         $coroutine->execute(...$data);

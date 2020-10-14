@@ -25,11 +25,11 @@ interface CoroutineInterface
      * @param mixed ...$data
      * @return $this
      */
-    public static function run(callable $callable, ...$data);
+    public static function create(callable $callable, ...$data);
 
     /**
      * @param mixed ...$data
-     * @return mixed
+     * @return $this
      */
     public function execute(...$data);
 

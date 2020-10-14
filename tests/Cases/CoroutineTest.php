@@ -32,12 +32,9 @@ class CoroutineTest extends AbstractTestCase
             $this->assertInstanceOf(CoroutineInterface::class, $coroutine);
             $this->assertIsInt($coroutine->getId());
         });
-    }
 
-    public function testCoroutineRun()
-    {
         $this->runInCoroutine(function () {
-            $coroutine = Coroutine::run(function () {
+            $coroutine = Coroutine::create(function () {
                 $this->assertTrue(true);
             });
 
