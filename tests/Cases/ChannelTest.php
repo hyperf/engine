@@ -72,4 +72,16 @@ class ChannelTest extends AbstractTestCase
             $this->assertTrue($channel->isClosing());
         });
     }
+
+    public function testChannelIsAvailable()
+    {
+        $this->runInCoroutine(function () {
+            /** @var ChannelInterface $channel */
+            $channel = new Channel();
+            $this->assertTrue($channel->isAvailable());
+            $channel->close();
+            $channel->pop();
+            $this->assertFalse($channel->isAvailable());
+        });
+    }
 }

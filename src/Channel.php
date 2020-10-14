@@ -27,7 +27,7 @@ class Channel extends \Swoole\Coroutine\Channel implements ChannelInterface
 
     public function isAvailable()
     {
-        // TODO: Implement isAvailable() method.
+        return ! $this->isClosing();
     }
 
     public function hasProducers()
@@ -47,7 +47,6 @@ class Channel extends \Swoole\Coroutine\Channel implements ChannelInterface
 
     public function isWritable()
     {
-
     }
 
     public function isClosing()
