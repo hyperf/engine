@@ -53,4 +53,9 @@ class Channel extends \Swoole\Coroutine\Channel implements ChannelInterface
     {
         return $this->errCode === SWOOLE_CHANNEL_CLOSED;
     }
+
+    public function isTimeout()
+    {
+        return $this->errCode === SWOOLE_CHANNEL_TIMEOUT;
+    }
 }
