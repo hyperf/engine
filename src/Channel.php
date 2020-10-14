@@ -47,11 +47,11 @@ class Channel extends \Swoole\Coroutine\Channel implements ChannelInterface
 
     public function isWritable()
     {
-        // TODO: Implement isWritable() method.
+
     }
 
     public function isClosing()
     {
-        // TODO: Implement isClosing() method.
+        return $this->errCode === SWOOLE_CHANNEL_CLOSED;
     }
 }

@@ -13,6 +13,7 @@ namespace HyperfTest\Cases;
 
 use Hyperf\Engine\Channel;
 use Hyperf\Engine\Contract\ChannelInterface;
+use Hyperf\Engine\Coroutine;
 
 /**
  * @internal
@@ -39,6 +40,36 @@ class ChannelTest extends AbstractTestCase
             $actual[] = $channel->pop();
 
             $this->assertSame($result, $actual);
+        });
+    }
+
+    public function testChannelInCoroutine()
+    {
+        $this->runInCoroutine(function () {
+            $id = uniqid();
+            /** @var ChannelInterface $channel */
+            $channel = new Channel(1);
+            Coroutine::create(function () use ($channel, $id) {
+                usleep(2000);
+                $channel->push($id);
+            });
+            $t = microtime(true);
+            $this->assertSame($id, $channel->pop());
+            $this->assertTrue((microtime(true) - $t) > 0.001);
+        });
+    }
+
+    public function testChannelClose()
+    {
+        $this->runInCoroutine(function () {
+            /** @var ChannelInterface $channel */
+            $channel = new Channel();
+            Coroutine::create(function () use ($channel) {
+                usleep(1000);
+                $channel->close();
+            });
+            $this->assertFalse($channel->pop());
+            $this->assertTrue($channel->isClosing());
         });
     }
 }
