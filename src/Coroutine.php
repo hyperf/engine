@@ -29,7 +29,7 @@ class Coroutine implements CoroutineInterface
      */
     private $id;
 
-    public function __construct(callable $callable, int $stackPageSize = 0, int $stackSize = 0)
+    public function __construct(callable $callable)
     {
         $this->callable = $callable;
     }
