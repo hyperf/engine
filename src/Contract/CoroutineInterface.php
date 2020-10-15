@@ -42,4 +42,12 @@ interface CoroutineInterface
      * @return int
      */
     public static function id();
+
+    public static function set(array $config);
+
+    /**
+     * @param null|int $id coroutine id
+     * @return null|\ArrayObject
+     */
+    public static function getContextFor(?int $id = null);
 }

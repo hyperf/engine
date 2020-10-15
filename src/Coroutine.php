@@ -56,4 +56,18 @@ class Coroutine implements CoroutineInterface
     {
         return SwooleCo::getCid();
     }
+
+    public static function set(array $config)
+    {
+        SwooleCo::set($config);
+    }
+
+    public static function getContextFor(?int $id = null)
+    {
+        if ($id === null) {
+            return SwooleCo::getContext();
+        }
+
+        return SwooleCo::getContext($id);
+    }
 }
