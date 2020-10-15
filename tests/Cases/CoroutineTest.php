@@ -135,7 +135,7 @@ class CoroutineTest extends AbstractTestCase
     public function testTheOrderForCoroutineDefer()
     {
         $this->runInCoroutine(function () {
-            $channel = new Channel(2);
+            $channel = new Channel(3);
             Coroutine::create(function () use ($channel) {
                 Coroutine::defer(function () use ($channel) {
                     $channel->push(2);
