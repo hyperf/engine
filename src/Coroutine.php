@@ -12,6 +12,8 @@ declare(strict_types=1);
 namespace Hyperf\Engine;
 
 use Hyperf\Engine\Contract\CoroutineInterface;
+use Hyperf\Engine\Exception\CoroutineDestroyedException;
+use Hyperf\Engine\Exception\RunningInNonCoroutineException;
 use Hyperf\Engine\Exception\RuntimeException;
 use Swoole\Coroutine as SwooleCo;
 
@@ -55,6 +57,22 @@ class Coroutine implements CoroutineInterface
     public static function id()
     {
         return SwooleCo::getCid();
+    }
+
+    public static function pid(?int $id = null)
+    {
+        if ($id) {
+            $cid = SwooleCo::getPcid($id);
+            if ($cid === false) {
+                throw new CoroutineDestroyedException(sprintf('Coroutine #%d has been destroyed.', $id));
+            }
+        } else {
+            $cid = SwooleCo::getPcid();
+        }
+        if ($cid === false) {
+            throw new RunningInNonCoroutineException('Non-Coroutine environment don\'t has parent coroutine id.');
+        }
+        return $cid;
     }
 
     public static function set(array $config)

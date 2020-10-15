@@ -11,6 +11,8 @@ declare(strict_types=1);
  */
 namespace Hyperf\Engine\Contract;
 
+use Hyperf\Engine\Exception\RuntimeException;
+
 interface CoroutineInterface
 {
     /**
@@ -42,6 +44,13 @@ interface CoroutineInterface
      * @return int
      */
     public static function id();
+
+    /**
+     * Returns the parent coroutine ID.
+     * Returns 0 when running in the top level coroutine.
+     * @throws RuntimeException when running in non-coroutine context
+     */
+    public static function pid(?int $id = null);
 
     public static function set(array $config);
 

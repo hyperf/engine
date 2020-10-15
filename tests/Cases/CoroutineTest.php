@@ -13,6 +13,8 @@ namespace HyperfTest\Cases;
 
 use Hyperf\Engine\Contract\CoroutineInterface;
 use Hyperf\Engine\Coroutine;
+use Hyperf\Engine\Exception\CoroutineDestroyedException;
+use Hyperf\Engine\Exception\RunningInNonCoroutineException;
 
 /**
  * @internal
@@ -60,6 +62,48 @@ class CoroutineTest extends AbstractTestCase
 
             usleep(1000);
             $this->assertNull(Coroutine::getContextFor($coroutine->getId()));
+        });
+    }
+
+    public function testCoroutinePid()
+    {
+        $this->runInCoroutine(function () {
+            $pid = Coroutine::id();
+            Coroutine::create(function () use ($pid) {
+                $this->assertSame($pid, Coroutine::pid());
+                $pid = Coroutine::id();
+                $co = Coroutine::create(function () use ($pid) {
+                    $this->assertSame($pid, Coroutine::pid(Coroutine::id()));
+                    usleep(1000);
+                });
+                Coroutine::create(function () use ($pid) {
+                    $this->assertSame($pid, Coroutine::pid());
+                });
+                $this->assertSame($pid, Coroutine::pid($co->getId()));
+            });
+        });
+    }
+
+    public function testCoroutinePidInNonCoroutineEnvironment()
+    {
+        $this->expectExceptionMessage('Non-Coroutine environment don\'t has parent coroutine id.');
+        $this->expectException(RunningInNonCoroutineException::class);
+
+        Coroutine::pid();
+    }
+
+    public function testCoroutinePidHasBeenDestroyed()
+    {
+        $this->runInCoroutine(function () {
+            $co = Coroutine::create(function () {
+            });
+
+            try {
+                Coroutine::pid($co->getId());
+                $this->assertTrue(false);
+            } catch (\Throwable $exception) {
+                $this->assertInstanceOf(CoroutineDestroyedException::class, $exception);
+            }
         });
     }
 }
