@@ -88,4 +88,9 @@ class Coroutine implements CoroutineInterface
 
         return SwooleCo::getContext($id);
     }
+
+    public static function defer(callable $callable)
+    {
+        SwooleCo::defer($callable);
+    }
 }
