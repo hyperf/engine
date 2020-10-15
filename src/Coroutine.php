@@ -72,7 +72,7 @@ class Coroutine implements CoroutineInterface
         if ($cid === false) {
             throw new RunningInNonCoroutineException('Non-Coroutine environment don\'t has parent coroutine id.');
         }
-        return $cid;
+        return max(0, $cid);
     }
 
     public static function set(array $config)

@@ -106,4 +106,11 @@ class CoroutineTest extends AbstractTestCase
             }
         });
     }
+
+    public function testCoroutineInTopCoroutine()
+    {
+        $this->runInCoroutine(function () {
+            $this->assertSame(0, Coroutine::pid());
+        });
+    }
 }
