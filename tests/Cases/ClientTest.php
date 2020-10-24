@@ -46,6 +46,22 @@ class ClientTest extends AbstractTestCase
         });
     }
 
+    public function testClientJsonRequest()
+    {
+        $this->runInCoroutine(function () {
+            $client = new Client('127.0.0.1', 9501);
+            $response = $client->request(
+                'POST',
+                '/',
+                ['Content-Type' => 'application/json charset=UTF-8'],
+                json_encode(['name' => 'Hyperf'], JSON_UNESCAPED_UNICODE)
+            );
+            $this->assertSame(200, $response->statusCode);
+            $this->assertSame(['Hyperf'], $response->headers['server']);
+            $this->assertSame('Hello World.', $response->body);
+        });
+    }
+
     public function testClientSocketConnectionTimeout()
     {
         $this->runInCoroutine(function () {
