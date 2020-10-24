@@ -68,7 +68,7 @@ class Client extends HttpClient implements ClientInterface
     {
         $result = [];
         foreach ($headers as $name => $value) {
-            $result[$name] = implode(',', $value);
+            $result[$name] = is_array($value) ? implode(',', $value) : $value;
         }
 
         return $result;
