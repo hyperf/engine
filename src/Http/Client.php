@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace Hyperf\Engine\Http;
 
 use Hyperf\Engine\Contract\Http\ClientInterface;
+use Hyperf\Engine\Exception\HttpClientException;
 use Swoole\Coroutine\Http\Client as HttpClient;
 
 class Client extends HttpClient implements ClientInterface
@@ -31,6 +32,9 @@ class Client extends HttpClient implements ClientInterface
         $this->setData($conotents);
         $this->setHeaders($this->encodeHeaders($headers));
         $this->execute($path);
+        if ($this->errCode !== 0) {
+            throw new HttpClientException($this->errMsg, $this->errCode);
+        }
         return new RawResponse(
             $this->statusCode,
             $this->decodeHeaders($this->headers),

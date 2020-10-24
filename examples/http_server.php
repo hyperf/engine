@@ -13,6 +13,9 @@ use Hyperf\Engine\Coroutine;
 use Swoole\Coroutine\Http\Server;
 
 require_once __DIR__ . '/../vendor/autoload.php';
+Coroutine::set([
+    'hook_flags' => SWOOLE_HOOK_ALL,
+]);
 
 Coroutine::create(function () {
     $server = new Server('0.0.0.0', 9501);
@@ -26,6 +29,11 @@ Coroutine::create(function () {
                 $response->setCookie('X-Server-Id', $id = uniqid());
                 $response->setCookie('X-Server-Name', 'Hyperf');
                 $response->end($id);
+                break;
+            case '/timeout':
+                $time = $request->get['time'] ?? 1;
+                sleep((int) $time);
+                $response->end();
                 break;
             default:
                 $response->setStatusCode(404);
