@@ -29,6 +29,10 @@ jobs:
         run: ./tests/swoole.install.sh
       - name: Setup Packages
         run: composer install -o --ignore-platform-reqs
+      - name: Build Docker
+        run: cp ./.github/workflows/Dockerfile Dockerfile && docker build . -t swoole:latest
+      - name: Run Server
+        run: docker run --entrypoint php -p 9501:9501 -d swoole:latest examples/http_server.php
       - name: Run Test Cases
         run: |
           composer analyse

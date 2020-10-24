@@ -14,21 +14,11 @@ namespace Hyperf\Engine\Http;
 use Hyperf\Engine\Contract\Http\ClientInterface;
 use Swoole\Coroutine\Http\Client as HttpClient;
 
-class Client implements ClientInterface
+class Client extends HttpClient implements ClientInterface
 {
-    /**
-     * @var HttpClient
-     */
-    protected $client;
-
-    public function __construct(string $name, int $port, bool $ssl = false)
-    {
-        $this->client = new HttpClient($name, $port, $ssl);
-    }
-
     public function set(array $settings)
     {
-        $this->client->set($settings);
+        parent::set($settings);
         return $this;
     }
 
@@ -37,15 +27,14 @@ class Client implements ClientInterface
      */
     public function request(string $method = 'GET', string $path = '/', array $headers = [], string $conotents = '', string $version = '1.1'): RawResponse
     {
-        $client = $this->client;
-        $client->setMethod($method);
-        $client->setData($conotents);
-        $client->setHeaders($this->encodeHeaders($headers));
-        $client->execute($path);
+        $this->setMethod($method);
+        $this->setData($conotents);
+        $this->setHeaders($this->encodeHeaders($headers));
+        $this->execute($path);
         return new RawResponse(
-            $client->statusCode,
-            $this->decodeHeaders($client, $client->headers),
-            $client->body,
+            $this->statusCode,
+            $this->decodeHeaders($this->headers),
+            $this->body,
             $version
         );
     }
@@ -54,14 +43,14 @@ class Client implements ClientInterface
      * @param string[] $headers
      * @return string[][]
      */
-    private function decodeHeaders(HttpClient $client, array $headers): array
+    private function decodeHeaders(array $headers): array
     {
         $result = [];
         foreach ($headers as $name => $header) {
             $result[$name][] = $header;
         }
-        if ($client->set_cookie_headers) {
-            $result['Set-Cookies'] = $client->set_cookie_headers;
+        if ($this->set_cookie_headers) {
+            $result['Set-Cookies'] = $this->set_cookie_headers;
         }
         return $result;
     }

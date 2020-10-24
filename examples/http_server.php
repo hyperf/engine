@@ -1,0 +1,32 @@
+<?php
+
+declare(strict_types=1);
+/**
+ * This file is part of Hyperf.
+ *
+ * @link     https://www.hyperf.io
+ * @document https://hyperf.wiki
+ * @contact  group@hyperf.io
+ * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
+ */
+use Hyperf\Engine\Coroutine;
+use Swoole\Coroutine\Http\Server;
+
+require_once __DIR__ . '/../vendor/autoload.php';
+
+Coroutine::create(function () {
+    $server = new Server('0.0.0.0', 9501);
+    $server->handle('/', function (Swoole\Http\Request $request, Swoole\Http\Response $response) {
+        $response->setHeader('Server', 'Hyperf');
+        switch ($request->server['request_uri']) {
+            case '/':
+                $response->end('Hello World.');
+                break;
+            default:
+                $response->setStatusCode(404);
+                $response->end();
+                break;
+        }
+    });
+    $server->start();
+});
