@@ -22,6 +22,11 @@ Coroutine::create(function () {
             case '/':
                 $response->end('Hello World.');
                 break;
+            case '/cookies':
+                $response->setCookie('X-Server-Id', $id = uniqid());
+                $response->setCookie('X-Server-Name', 'Hyperf');
+                $response->end($id);
+                break;
             default:
                 $response->setStatusCode(404);
                 $response->end();
