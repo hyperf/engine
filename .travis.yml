@@ -30,6 +30,8 @@ install:
 before_script:
   - cd $TRAVIS_BUILD_DIR
   - composer update -o
+  - cp ./.github/workflows/Dockerfile Dockerfile && docker build . -t swoole:latest
+  - docker run --entrypoint php -p 9501:9501 -d swoole:latest examples/http_server.php
 
 script:
   - composer analyse
