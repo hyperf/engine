@@ -20,6 +20,9 @@ use Hyperf\Engine\Http\Client;
  */
 class ClientTest extends AbstractTestCase
 {
+    /**
+     * @group Server
+     */
     public function testClientRequest()
     {
         $this->runInCoroutine(function () {
@@ -31,6 +34,9 @@ class ClientTest extends AbstractTestCase
         });
     }
 
+    /**
+     * @group Server
+     */
     public function testClientSocketConnectionRefused()
     {
         $this->runInCoroutine(function () {
@@ -46,6 +52,9 @@ class ClientTest extends AbstractTestCase
         });
     }
 
+    /**
+     * @group Server
+     */
     public function testClientJsonRequest()
     {
         $this->runInCoroutine(function () {
@@ -62,6 +71,9 @@ class ClientTest extends AbstractTestCase
         });
     }
 
+    /**
+     * @group Server
+     */
     public function testClientSocketConnectionTimeout()
     {
         $this->runInCoroutine(function () {
@@ -78,6 +90,9 @@ class ClientTest extends AbstractTestCase
         });
     }
 
+    /**
+     * @group Server
+     */
     public function testClientCookies()
     {
         $this->runInCoroutine(function () {

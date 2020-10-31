@@ -28,7 +28,9 @@ class ConstantTest extends AbstractTestCase
 
     public function testIsCoroutineServer()
     {
-        $this->assertTrue(Constant::isCoroutineServer(new HttpServer('127.0.0.1')));
-        $this->assertTrue(Constant::isCoroutineServer(new Server('127.0.0.1')));
+        $this->runInCoroutine(function () {
+            $this->assertTrue(Constant::isCoroutineServer(new HttpServer('127.0.0.1')));
+            $this->assertTrue(Constant::isCoroutineServer(new Server('127.0.0.1')));
+        });
     }
 }
