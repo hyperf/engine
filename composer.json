@@ -18,14 +18,16 @@
         }
     },
     "require": {
-        "php": ">=7.3",
-        "ext-swoole": ">=4.5"
+        "php": ">=7.3"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.14",
         "phpstan/phpstan": "^0.12",
         "phpunit/phpunit": "^9.4",
         "swoole/ide-helper": "dev-master"
+    },
+    "suggest": {
+        "ext-swoole": ">=4.5"
     },
     "config": {
         "sort-packages": true
