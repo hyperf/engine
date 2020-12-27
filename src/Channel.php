@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace Hyperf\Engine;
 
 use Hyperf\Engine\Contract\ChannelInterface;
+use Hyperf\Engine\Exception\RuntimeException;
 
 class Channel extends \Swoole\Coroutine\Channel implements ChannelInterface
 {
@@ -43,21 +44,22 @@ class Channel extends \Swoole\Coroutine\Channel implements ChannelInterface
 
     public function hasProducers()
     {
-        // TODO: Implement hasProducers() method.
+        throw new RuntimeException('Not supported.');
     }
 
     public function hasConsumers()
     {
-        // TODO: Implement hasConsumers() method.
+        throw new RuntimeException('Not supported.');
     }
 
     public function isReadable()
     {
-        // TODO: Implement isReadable() method.
+        throw new RuntimeException('Not supported.');
     }
 
     public function isWritable()
     {
+        throw new RuntimeException('Not supported.');
     }
 
     public function isClosing()
