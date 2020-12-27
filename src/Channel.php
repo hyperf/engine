@@ -15,6 +15,11 @@ use Hyperf\Engine\Contract\ChannelInterface;
 
 class Channel extends \Swoole\Coroutine\Channel implements ChannelInterface
 {
+    /**
+     * @var bool
+     */
+    protected $closed = false;
+
     public function getCapacity()
     {
         return $this->capacity;
@@ -28,6 +33,12 @@ class Channel extends \Swoole\Coroutine\Channel implements ChannelInterface
     public function isAvailable()
     {
         return ! $this->isClosing();
+    }
+
+    public function close()
+    {
+        $this->closed = true;
+        parent::close();
     }
 
     public function hasProducers()
@@ -51,11 +62,11 @@ class Channel extends \Swoole\Coroutine\Channel implements ChannelInterface
 
     public function isClosing()
     {
-        return $this->errCode === SWOOLE_CHANNEL_CLOSED;
+        return $this->closed || $this->errCode === SWOOLE_CHANNEL_CLOSED;
     }
 
     public function isTimeout()
     {
-        return $this->errCode === SWOOLE_CHANNEL_TIMEOUT;
+        return ! $this->closed && $this->errCode === SWOOLE_CHANNEL_TIMEOUT;
     }
 }
