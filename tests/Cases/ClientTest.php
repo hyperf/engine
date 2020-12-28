@@ -106,4 +106,16 @@ class ClientTest extends AbstractTestCase
             ], $response->headers['Set-Cookies']);
         });
     }
+
+    /**
+     * @group Server
+     */
+    public function testClientNotFound()
+    {
+        $this->runInCoroutine(function () {
+            $client = new Client('127.0.0.1', 9501);
+            $response = $client->request('GET', '/not_found');
+            $this->assertSame(404, $response->statusCode);
+        });
+    }
 }
