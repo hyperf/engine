@@ -40,7 +40,7 @@ interface CoroutineInterface
     public static function create(callable $callable, ...$data);
 
     /**
-     * @return int
+     * @return int returns coroutine id from current coroutine, -1 in non coroutine environment
      */
     public static function id();
 

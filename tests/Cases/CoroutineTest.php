@@ -66,6 +66,15 @@ class CoroutineTest extends AbstractTestCase
         });
     }
 
+    public function testCoroutineId()
+    {
+        $this->assertSame(-1, Coroutine::id());
+        $this->runInCoroutine(function () {
+            $this->assertIsInt($id = Coroutine::id());
+            $this->assertGreaterThan(0, $id);
+        });
+    }
+
     public function testCoroutinePid()
     {
         $this->runInCoroutine(function () {
