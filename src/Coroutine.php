@@ -80,6 +80,9 @@ class Coroutine implements CoroutineInterface
         SwooleCo::set($config);
     }
 
+    /**
+     * @return null|\ArrayObject
+     */
     public static function getContextFor(?int $id = null)
     {
         if ($id === null) {
