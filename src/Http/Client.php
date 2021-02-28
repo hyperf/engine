@@ -37,7 +37,7 @@ class Client extends HttpClient implements ClientInterface
         }
         return new RawResponse(
             $this->statusCode,
-            $this->decodeHeaders($this->headers),
+            $this->decodeHeaders($this->headers ?? []),
             $this->body,
             $version
         );
