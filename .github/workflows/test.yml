@@ -12,7 +12,7 @@ jobs:
         os: [ ubuntu-latest ]
         php-versions: [ '7.3', '7.4', '8.0' ]
         swoole-version: [ 'v4.5.11', 'v4.6.3' ]
-      max-parallel: 3
+      max-parallel: 6
     env:
       SW_VERSION: ${{ matrix.swoole-version }}
     steps:
