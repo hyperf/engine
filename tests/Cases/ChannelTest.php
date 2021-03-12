@@ -107,6 +107,11 @@ class ChannelTest extends AbstractTestCase
             $this->assertSame(true, $channel->push(1, 1));
             $this->assertSame(false, $channel->push(1, 1));
             $this->assertTrue($channel->isTimeout());
+
+            $channel = new Channel(1);
+            $this->assertSame(true, $channel->push(1, 1.0));
+            $this->assertSame(false, $channel->push(1, 1.0));
+            $this->assertTrue($channel->isTimeout());
         });
     }
 
