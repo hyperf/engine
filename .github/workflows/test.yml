@@ -1,18 +1,23 @@
 name: Swoole Engine Test
 
-on: [ push, pull_request ]
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron:  '0 10 * * *'
 
 jobs:
   ci:
-    name: PHP${{ matrix.php-versions }} Swoole${{ matrix.swoole-version }} Test on ${{ matrix.os }}
+    name: Test on PHP ${{ matrix.php-version }} Swoole ${{ matrix.swoole-version }}
     runs-on: "${{ matrix.os }}"
     strategy:
       matrix:
         # os: [ubuntu-latest, macos-latest, windows-latest]
         os: [ ubuntu-latest ]
-        php-versions: [ '7.3', '7.4', '8.0' ]
-        swoole-version: [ 'v4.5.11', 'v4.6.4' ]
-      max-parallel: 6
+        php-version: [ '7.3', '7.4', '8.0' ]
+        swoole-version: [ 'v4.5.11', 'v4.6.5', 'master' ]
+      max-parallel: 9
+      fail-fast: false
     env:
       SW_VERSION: ${{ matrix.swoole-version }}
     steps:
@@ -21,12 +26,24 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php-versions }}
+          php-version: ${{ matrix.php-version }}
           tools: phpize
-          ini-values: extension=swoole
           coverage: none
       - name: Build Swoole
-        run: ./tests/swoole.install.sh
+        run: |
+          sudo apt-get update
+          sudo apt-get install libcurl4-openssl-dev
+          wget https://github.com/swoole/swoole-src/archive/${SW_VERSION}.tar.gz -O swoole.tar.gz
+          mkdir -p swoole
+          tar -xf swoole.tar.gz -C swoole --strip-components=1
+          rm swoole.tar.gz
+          cd swoole
+          phpize
+          ./configure --enable-openssl --enable-http2 --enable-swoole-curl --enable-swoole-json
+          make -j$(nproc)
+          sudo make install
+          sudo sh -c "echo extension=swoole > /etc/php/${{ matrix.php-version }}/cli/conf.d/swoole.ini"
+          php --ri swoole
       - name: Setup Packages
         run: composer install -o --ignore-platform-reqs
       - name: Build Docker
