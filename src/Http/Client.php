@@ -26,10 +26,10 @@ class Client extends HttpClient implements ClientInterface
     /**
      * @param string[][] $headers
      */
-    public function request(string $method = 'GET', string $path = '/', array $headers = [], string $conotents = '', string $version = '1.1'): RawResponse
+    public function request(string $method = 'GET', string $path = '/', array $headers = [], string $contents = '', string $version = '1.1'): RawResponse
     {
         $this->setMethod($method);
-        $this->setData($conotents);
+        $this->setData($contents);
         $this->setHeaders($this->encodeHeaders($headers));
         $this->execute($path);
         if ($this->errCode !== 0) {
