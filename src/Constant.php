@@ -16,7 +16,7 @@ use Swoole\Coroutine\Server;
 
 class Constant
 {
-    const ENGINE = 'Swoole';
+    public const ENGINE = 'Swoole';
 
     public static function isCoroutineServer($server): bool
     {
