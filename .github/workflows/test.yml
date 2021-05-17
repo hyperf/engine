@@ -12,10 +12,9 @@ jobs:
     runs-on: "${{ matrix.os }}"
     strategy:
       matrix:
-        # os: [ubuntu-latest, macos-latest, windows-latest]
         os: [ ubuntu-latest ]
         php-version: [ '7.3', '7.4', '8.0' ]
-        swoole-version: [ 'v4.5.11', 'v4.6.5', 'master' ]
+        swoole-version: [ 'v4.5.11', 'v4.6.7', 'master' ]
       max-parallel: 9
       fail-fast: false
     env:
@@ -45,9 +44,9 @@ jobs:
           sudo sh -c "echo extension=swoole > /etc/php/${{ matrix.php-version }}/cli/conf.d/swoole.ini"
           php --ri swoole
       - name: Setup Packages
-        run: composer install -o --ignore-platform-reqs
+        run: composer install -o
       - name: Build Docker
-        run: cp ./.github/workflows/Dockerfile Dockerfile && docker build . -t swoole:latest
+        run: docker build . -t swoole:latest --build-arg PHP_VERSION=${{ matrix.php-version }}
       - name: Run Server
         run: docker run --entrypoint php -p 9501:9501 -d swoole:latest examples/http_server.php
       - name: Run Test Cases
