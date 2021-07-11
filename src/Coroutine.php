@@ -44,6 +44,7 @@ class Coroutine implements CoroutineInterface
     public function execute(...$data)
     {
         $this->id = SwooleCo::create($this->callable, ...$data);
+        return $this;
     }
 
     public function getId()
