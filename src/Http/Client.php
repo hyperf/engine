@@ -54,7 +54,7 @@ class Client extends HttpClient implements ClientInterface
             $result[$name][] = $header;
         }
         if ($this->set_cookie_headers) {
-            $result['Set-Cookies'] = $this->set_cookie_headers;
+            $result['Set-Cookie'] = $this->set_cookie_headers;
         }
         return $result;
     }

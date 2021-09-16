@@ -103,7 +103,7 @@ class ClientTest extends AbstractTestCase
             $this->assertSame([
                 'X-Server-Id=' . $response->body,
                 'X-Server-Name=Hyperf',
-            ], $response->headers['Set-Cookies']);
+            ], $response->headers['Set-Cookie']);
         });
     }
 
