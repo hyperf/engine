@@ -30,6 +30,7 @@ class WebSocket implements WebSocketInterface
     public function __construct(Response $connection)
     {
         $this->connection = $connection;
+        $this->connection->upgrade();
     }
 
     public function on(string $event, callable $callback): void
@@ -39,8 +40,6 @@ class WebSocket implements WebSocketInterface
 
     public function start(): void
     {
-        $this->connection->upgrade();
-
         while (true) {
             $frame = $this->connection->recv();
             if ($frame === false || $frame instanceof CloseFrame || $frame === '') {
