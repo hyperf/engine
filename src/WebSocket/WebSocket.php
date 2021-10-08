@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace Hyperf\Engine\WebSocket;
 
 use Hyperf\Engine\Contract\WebSocket\WebSocketInterface;
+use Swoole\Http\Request;
 use Swoole\Http\Response;
 use Swoole\WebSocket\CloseFrame;
 
@@ -27,7 +28,7 @@ class WebSocket implements WebSocketInterface
      */
     protected $events = [];
 
-    public function __construct(Response $connection)
+    public function __construct(Response $connection, Request $request)
     {
         $this->connection = $connection;
         $this->connection->upgrade();
