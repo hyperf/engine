@@ -25,6 +25,10 @@ Coroutine::create(function () {
             case '/':
                 $response->end('Hello World.');
                 break;
+            case '/header':
+                $response->header('X-ID', [uniqid(), $id = uniqid()]);
+                $response->end($id);
+                break;
             case '/cookies':
                 $response->setCookie('X-Server-Id', $id = uniqid());
                 $response->setCookie('X-Server-Name', 'Hyperf');

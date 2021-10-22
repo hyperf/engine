@@ -11,8 +11,10 @@ declare(strict_types=1);
  */
 namespace HyperfTest\Cases;
 
+use GuzzleHttp;
 use Hyperf\Engine\Exception\HttpClientException;
 use Hyperf\Engine\Http\Client;
+use Hyperf\Guzzle\CoroutineHandler;
 
 /**
  * @internal
@@ -103,7 +105,57 @@ class ClientTest extends AbstractTestCase
             $this->assertSame([
                 'X-Server-Id=' . $response->body,
                 'X-Server-Name=Hyperf',
-            ], $response->headers['Set-Cookie']);
+            ], $response->headers['set-cookie']);
+        });
+    }
+
+    /**
+     * @group Server
+     */
+    public function testGuzzleClientWithCookies()
+    {
+        $this->runInCoroutine(function () {
+            $client = new GuzzleHttp\Client([
+                'base_uri' => 'http://127.0.0.1:9501/',
+                'handler' => GuzzleHttp\HandlerStack::create(new CoroutineHandler()),
+                'cookies' => true,
+            ]);
+
+            $response = $client->get('cookies');
+
+            $cookies = $client->getConfig('cookies');
+
+            $this->assertSame((string) $response->getBody(), $cookies->toArray()[0]['Value']);
+            $this->assertSame('Hyperf', $cookies->toArray()[1]['Value']);
+        });
+    }
+
+    /**
+     * @group Server
+     */
+    public function testServerHeaders()
+    {
+        $this->runInCoroutine(function () {
+            // TODO: Co Client Won't support to get multi response headers.
+            $client = new Client('127.0.0.1', 9501);
+            $response = $client->request('GET', '/header');
+            $this->assertSame($response->body, implode(',', $response->headers['x-id']));
+
+            $client = new GuzzleHttp\Client([
+                'base_uri' => 'http://127.0.0.1:9501/',
+                'handler' => GuzzleHttp\HandlerStack::create(new CoroutineHandler()),
+            ]);
+
+            $response = $client->get('/header');
+            $this->assertSame((string) $response->getBody(), $response->getHeaderLine('x-id'));
+
+            // TODO: But native curl support to get multi response headers.
+            $client = new GuzzleHttp\Client([
+                'base_uri' => 'http://127.0.0.1:9501/',
+            ]);
+            $response = $client->get('/header');
+            $this->assertSame(2, count($response->getHeader('x-id')));
+            $this->assertSame((string) $response->getBody(), $response->getHeader('x-id')[1]);
         });
     }
 

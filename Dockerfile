@@ -14,6 +14,7 @@ ARG timezone
 ARG PHP_VERSION
 
 ENV TIMEZONE=${timezone:-"Asia/Shanghai"}
+ENV COMPOSER_ROOT_VERSION="v1.2.0"
 
 # update
 RUN set -ex \
