@@ -136,7 +136,7 @@ class ClientTest extends AbstractTestCase
     public function testServerHeaders()
     {
         $this->runInCoroutine(function () {
-            // TODO: Co Client Won't support to get multi response headers.
+            // Co Client Won't support to get multi response headers.
             $client = new Client('127.0.0.1', 9501);
             $response = $client->request('GET', '/header');
             $this->assertSame($response->body, implode(',', $response->headers['x-id']));
@@ -149,13 +149,15 @@ class ClientTest extends AbstractTestCase
             $response = $client->get('/header');
             $this->assertSame((string) $response->getBody(), $response->getHeaderLine('x-id'));
 
-            // TODO: But native curl support to get multi response headers.
-            $client = new GuzzleHttp\Client([
-                'base_uri' => 'http://127.0.0.1:9501/',
-            ]);
-            $response = $client->get('/header');
-            $this->assertSame(2, count($response->getHeader('x-id')));
-            $this->assertSame((string) $response->getBody(), $response->getHeader('x-id')[1]);
+            // When Swoole version > 4.5, The native curl support to get multi response headers.
+            if (SWOOLE_VERSION_ID >= 40600) {
+                $client = new GuzzleHttp\Client([
+                    'base_uri' => 'http://127.0.0.1:9501/',
+                ]);
+                $response = $client->get('/header');
+                $this->assertSame(2, count($response->getHeader('x-id')));
+                $this->assertSame((string) $response->getBody(), $response->getHeader('x-id')[1]);
+            }
         });
     }
 
