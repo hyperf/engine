@@ -52,5 +52,4 @@ jobs:
         run: docker run --entrypoint php -p 9501:9501 -d swoole:latest examples/http_server.php
       - name: Run Test Cases
         run: |
-          composer analyse
           composer test

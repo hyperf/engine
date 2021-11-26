@@ -17,10 +17,9 @@ use Swoole\Coroutine\Http\Client as HttpClient;
 
 class Client extends HttpClient implements ClientInterface
 {
-    public function set(array $settings)
+    public function set(array $settings): bool
     {
-        parent::set($settings);
-        return $this;
+        return parent::set($settings);
     }
 
     /**
