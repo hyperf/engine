@@ -11,13 +11,14 @@ declare(strict_types=1);
  */
 use Hyperf\Engine\Coroutine;
 use Swoole\Coroutine\Http\Server;
+use function Swoole\Coroutine\run;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 Coroutine::set([
     'hook_flags' => SWOOLE_HOOK_ALL,
 ]);
 
-Coroutine::create(function () {
+$callback = function () {
     $server = new Server('0.0.0.0', 9501);
     $server->handle('/', function (Swoole\Http\Request $request, Swoole\Http\Response $response) {
         $response->setHeader('Server', 'Hyperf');
@@ -46,4 +47,9 @@ Coroutine::create(function () {
         }
     });
     $server->start();
-});
+};
+if (function_exists('Swoole\Coroutine\run')) {
+    run($callback);
+} else {
+    Coroutine::create($callback);
+}
