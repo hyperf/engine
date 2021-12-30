@@ -13,14 +13,20 @@ jobs:
     strategy:
       matrix:
         os: [ ubuntu-latest ]
-        php-version: [ '7.3', '7.4', '8.0' ]
-        swoole-version: [ 'v4.5.11', 'v4.6.7', 'v4.7.1', 'v4.8.0', 'master' ]
+        php-version: [ '7.3', '7.4', '8.0', '8.1' ]
+        swoole-version: [ 'v4.5.11', 'v4.6.7', 'v4.7.1', 'v4.8.5', 'master' ]
         exclude:
           - php-version: '7.3'
             swoole-version: 'master'
           - php-version: '7.4'
             swoole-version: 'master'
-      max-parallel: 9
+          - php-version: '8.1'
+            swoole-version: 'v4.5.11'
+          - php-version: '8.1'
+            swoole-version: 'v4.6.7'
+          - php-version: '8.1'
+            swoole-version: 'v4.7.1'
+      max-parallel: 16
       fail-fast: false
     env:
       SW_VERSION: ${{ matrix.swoole-version }}
@@ -52,7 +58,18 @@ jobs:
       - name: Setup Packages
         run: composer install -o
       - name: Build Docker
-        run: docker build . -t swoole:latest --build-arg PHP_VERSION=${{ matrix.php-version }}
+        run: |
+          if [ v${{ matrix.php-version }} = 'v7.3' ]
+          then
+            docker build . -t swoole:latest --build-arg PHP_VERSION=${{ matrix.php-version }} --build-arg ALPINE_VERSION=v3.11
+          else
+            if [ v${{ matrix.php-version }} = 'v8.1' ]
+            then
+              docker build . -t swoole:latest --build-arg PHP_VERSION=${{ matrix.php-version }} --build-arg ALPINE_VERSION=v3.14
+            else
+              docker build . -t swoole:latest --build-arg PHP_VERSION=${{ matrix.php-version }} --build-arg ALPINE_VERSION=v3.15
+            fi
+          fi
       - name: Run Server
         run: docker run --entrypoint php -p 9501:9501 -d swoole:latest examples/http_server.php
       - name: Run Test Cases
