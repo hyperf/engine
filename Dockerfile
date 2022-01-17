@@ -42,5 +42,3 @@ RUN set -ex \
 WORKDIR /opt/www
 
 COPY . /opt/www
-
-RUN composer install -o

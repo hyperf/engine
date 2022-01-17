@@ -30,6 +30,9 @@
     "suggest": {
         "ext-swoole": ">=5.0"
     },
+    "conflict": {
+        "ext-swoole": "<5.0"
+    },
     "minimum-stability": "dev",
     "prefer-stable": true,
     "config": {
