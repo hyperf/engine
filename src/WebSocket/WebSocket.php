@@ -18,15 +18,12 @@ use Swoole\WebSocket\CloseFrame;
 
 class WebSocket implements WebSocketInterface
 {
-    /**
-     * @var Response
-     */
-    protected $connection;
+    protected ?Response $connection;
 
     /**
      * @var array<string, callable>
      */
-    protected $events = [];
+    protected array $events = [];
 
     public function __construct(Response $connection, Request $request)
     {

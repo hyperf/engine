@@ -11,6 +11,7 @@ declare(strict_types=1);
  */
 namespace Hyperf\Engine;
 
+use ArrayObject;
 use Hyperf\Engine\Contract\CoroutineInterface;
 use Hyperf\Engine\Exception\CoroutineDestroyedException;
 use Hyperf\Engine\Exception\RunningInNonCoroutineException;
@@ -24,30 +25,27 @@ class Coroutine implements CoroutineInterface
      */
     private $callable;
 
-    /**
-     * @var int
-     */
-    private $id;
+    private ?int $id = null;
 
     public function __construct(callable $callable)
     {
         $this->callable = $callable;
     }
 
-    public static function create(callable $callable, ...$data)
+    public static function create(callable $callable, ...$data): static
     {
         $coroutine = new static($callable);
         $coroutine->execute(...$data);
         return $coroutine;
     }
 
-    public function execute(...$data)
+    public function execute(...$data): static
     {
         $this->id = SwooleCo::create($this->callable, ...$data);
         return $this;
     }
 
-    public function getId()
+    public function getId(): int
     {
         if (is_null($this->id)) {
             throw new RuntimeException('Coroutine was not be executed.');
@@ -55,12 +53,12 @@ class Coroutine implements CoroutineInterface
         return $this->id;
     }
 
-    public static function id()
+    public static function id(): int
     {
         return SwooleCo::getCid();
     }
 
-    public static function pid(?int $id = null)
+    public static function pid(?int $id = null): int
     {
         if ($id) {
             $cid = SwooleCo::getPcid($id);
@@ -76,15 +74,12 @@ class Coroutine implements CoroutineInterface
         return max(0, $cid);
     }
 
-    public static function set(array $config)
+    public static function set(array $config): void
     {
         SwooleCo::set($config);
     }
 
-    /**
-     * @return null|\ArrayObject
-     */
-    public static function getContextFor(?int $id = null)
+    public static function getContextFor(?int $id = null): ?ArrayObject
     {
         if ($id === null) {
             return SwooleCo::getContext();
@@ -93,7 +88,7 @@ class Coroutine implements CoroutineInterface
         return SwooleCo::getContext($id);
     }
 
-    public static function defer(callable $callable)
+    public static function defer(callable $callable): void
     {
         SwooleCo::defer($callable);
     }

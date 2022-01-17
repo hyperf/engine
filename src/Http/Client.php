@@ -60,7 +60,7 @@ class Client extends HttpClient implements ClientInterface
     }
 
     /**
-     * Swoole engine not support two dimensional array.
+     * Swoole engine not support two-dimensional array.
      * @param string[][] $headers
      * @return string[]
      */
