@@ -11,7 +11,7 @@ declare(strict_types=1);
  */
 namespace Hyperf\Engine\Contract;
 
-if (PHP_VERSION_ID > 80000 && SWOOLE_VERSION_ID >= 40900) {
+if (PHP_VERSION_ID > 80000 && SWOOLE_VERSION_ID >= 50000) {
     interface ChannelInterface
     {
         /**

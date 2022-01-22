@@ -14,7 +14,7 @@ namespace Hyperf\Engine;
 use Hyperf\Engine\Contract\ChannelInterface;
 use Hyperf\Engine\Exception\RuntimeException;
 
-if (PHP_VERSION_ID > 80000 && SWOOLE_VERSION_ID >= 40900) {
+if (PHP_VERSION_ID > 80000 && SWOOLE_VERSION_ID >= 50000) {
     class Channel extends \Swoole\Coroutine\Channel implements ChannelInterface
     {
         protected bool $closed = false;
