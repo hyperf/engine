@@ -48,8 +48,5 @@ $callback = function () {
     });
     $server->start();
 };
-if (function_exists('Swoole\Coroutine\run')) {
-    run($callback);
-} else {
-    Coroutine::create($callback);
-}
+
+run($callback);

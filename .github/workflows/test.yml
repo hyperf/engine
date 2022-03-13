@@ -31,6 +31,7 @@ jobs:
           coverage: none
       - name: Build Swoole
         run: |
+          cd /tmp
           sudo apt-get update
           sudo apt-get install libcurl4-openssl-dev
           wget https://github.com/swoole/swoole-src/archive/${SW_VERSION}.tar.gz -O swoole.tar.gz
@@ -55,7 +56,11 @@ jobs:
             docker build . -t swoole:latest --build-arg PHP_VERSION=${{ matrix.php-version }} --build-arg ALPINE_VERSION=v3.15
           fi
       - name: Run Server
-        run: docker run --entrypoint php -p 9501:9501 -d swoole:latest examples/http_server.php
+        run: |
+          docker run --entrypoint php -p 9501:9501 -d swoole:latest examples/http_server.php
+          docker run --entrypoint php -p 9502:9502 -d swoole:latest examples/tcp_packet_server.php
       - name: Run Test Cases
         run: |
+          vendor/bin/php-cs-fixer fix --dry-run
+          composer analyse
           composer test
