@@ -39,7 +39,7 @@ class SocketTest extends AbstractTestCase
     /**
      * @group Server
      */
-    public function testSocketConnectTcpServer()
+    public function testSocketRecvPacketFromTcpServer()
     {
         $this->runInCoroutine(function () {
             $socket = new Socket(AF_INET, SOCK_STREAM, 0);
@@ -53,6 +53,34 @@ class SocketTest extends AbstractTestCase
             $socket->connect('127.0.0.1', 9502);
             $socket->sendAll(pack('N', 4) . 'ping');
             $this->assertSame('pong', substr($socket->recvPacket(), 4));
+
+            $id = uniqid();
+            $socket->sendAll(pack('N', strlen($id)) . $id);
+            $this->assertSame('recv:' . $id, substr($socket->recvPacket(), 4));
+        });
+    }
+
+    /**
+     * @group Server
+     */
+    public function testSocketRecvAllFromTcpServer()
+    {
+        $this->runInCoroutine(function () {
+            $socket = new Socket(AF_INET, SOCK_STREAM, 0);
+            $socket->connect('127.0.0.1', 9502);
+            $socket->sendAll(pack('N', 4) . 'ping');
+            $res = $socket->recvAll(4);
+            $this->assertSame(4, unpack('Nlen', $res)['len']);
+            $res = $socket->recvAll(4);
+            $this->assertSame('pong', $res);
+
+            $id = str_repeat(uniqid(), rand(1, 10));
+            $socket->sendAll(pack('N', $len = strlen($id)) . $id);
+            $res = $socket->recvAll(4);
+            $len += 5;
+            $this->assertSame($len, unpack('Nlen', $res)['len']);
+            $res = $socket->recvAll($len);
+            $this->assertSame('recv:' . $id, $res);
         });
     }
 }
