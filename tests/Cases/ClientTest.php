@@ -43,7 +43,7 @@ class ClientTest extends AbstractTestCase
     {
         $this->runInCoroutine(function () {
             try {
-                $client = new Client('127.0.0.1', 9502);
+                $client = new Client('127.0.0.1', 9503);
                 $client->request('GET', '/timeout?time=1');
                 $this->assertTrue(false);
             } catch (\Throwable $exception) {
