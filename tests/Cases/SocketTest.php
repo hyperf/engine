@@ -58,6 +58,22 @@ class SocketTest extends AbstractTestCase
             $socket->sendAll(pack('N', strlen($id)) . $id);
             $this->assertSame('recv:' . $id, substr($socket->recvPacket(), 4));
         });
+
+        $this->runInCoroutine(function () {
+            $socket = (new Socket\SocketFactory())->make(new Socket\SocketOption('127.0.0.1', 9502, protocol: [
+                'open_length_check' => true,
+                'package_max_length' => 1024 * 1024 * 2,
+                'package_length_type' => 'N',
+                'package_length_offset' => 0,
+                'package_body_offset' => 4,
+            ]));
+            $socket->sendAll(pack('N', 4) . 'ping');
+            $this->assertSame('pong', substr($socket->recvPacket(), 4));
+
+            $id = uniqid();
+            $socket->sendAll(pack('N', strlen($id)) . $id);
+            $this->assertSame('recv:' . $id, substr($socket->recvPacket(), 4));
+        });
     }
 
     /**
