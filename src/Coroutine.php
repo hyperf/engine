@@ -108,7 +108,7 @@ class Coroutine implements CoroutineInterface
      * @param mixed $data only Support Swow
      * @return bool
      */
-    public static function resumeById(int $id, mixed $data = null): mixed
+    public static function resumeById(int $id, mixed ...$data): mixed
     {
         return SwooleCo::resume($id);
     }
