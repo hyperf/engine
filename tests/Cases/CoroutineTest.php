@@ -161,4 +161,28 @@ class CoroutineTest extends AbstractTestCase
             $this->assertSame(2, $channel->pop());
         });
     }
+
+    public function testCoroutineResumeById()
+    {
+        $this->runInCoroutine(function () {
+            $channel = new Channel(10);
+            Coroutine::create(function () use ($channel) {
+                $channel->push(1);
+                $co = Coroutine::create(function () use ($channel) {
+                    $channel->push(2);
+                    Coroutine::yield();
+                    $channel->push(3);
+                });
+                $channel->push(4);
+                $res = Coroutine::resumeById($co->getId());
+                $channel->push(5);
+            });
+
+            $this->assertSame(1, $channel->pop());
+            $this->assertSame(2, $channel->pop());
+            $this->assertSame(4, $channel->pop());
+            $this->assertSame(3, $channel->pop());
+            $this->assertSame(5, $channel->pop());
+        });
+    }
 }
