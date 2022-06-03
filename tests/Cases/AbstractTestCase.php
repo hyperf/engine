@@ -12,7 +12,7 @@ declare(strict_types=1);
 namespace HyperfTest\Cases;
 
 use PHPUnit\Framework\TestCase;
-use function Swoole\Coroutine\run as run;
+use function Swoole\Coroutine\run;
 
 /**
  * Class AbstractTestCase.
