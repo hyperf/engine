@@ -14,12 +14,12 @@ jobs:
       matrix:
         os: [ ubuntu-latest ]
         php-version: [ '8.0', '8.1' ]
-        swoole-version: [ 'master' ]
+        swoole-version: [ 'v5.0.0', 'master' ]
       max-parallel: 16
       fail-fast: false
     env:
       SW_VERSION: ${{ matrix.swoole-version }}
-      COMPOSER_ROOT_VERSION: 'v1.2.0'
+      COMPOSER_ROOT_VERSION: 'v2.0.0'
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -40,7 +40,7 @@ jobs:
           rm swoole.tar.gz
           cd swoole
           phpize
-          ./configure --enable-openssl --enable-http2 --enable-swoole-curl --enable-swoole-json
+          ./configure --enable-openssl --enable-swoole-curl
           make -j$(nproc)
           sudo make install
           sudo sh -c "echo extension=swoole > /etc/php/${{ matrix.php-version }}/cli/conf.d/swoole.ini"
@@ -51,9 +51,9 @@ jobs:
         run: |
           if [ v${{ matrix.php-version }} = 'v8.1' ]
           then
-            docker build . -t swoole:latest --build-arg PHP_VERSION=${{ matrix.php-version }} --build-arg ALPINE_VERSION=v3.14
+            docker build . -t swoole:latest --build-arg PHP_VERSION=${{ matrix.php-version }} --build-arg ALPINE_VERSION=v3.16
           else
-            docker build . -t swoole:latest --build-arg PHP_VERSION=${{ matrix.php-version }} --build-arg ALPINE_VERSION=v3.15
+            docker build . -t swoole:latest --build-arg PHP_VERSION=${{ matrix.php-version }} --build-arg ALPINE_VERSION=v3.16
           fi
       - name: Run Server
         run: |

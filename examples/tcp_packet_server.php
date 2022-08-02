@@ -11,6 +11,7 @@ declare(strict_types=1);
  */
 use Hyperf\Engine\Coroutine;
 use Swoole\Coroutine\Server;
+
 use function Swoole\Coroutine\run;
 
 require_once __DIR__ . '/../vendor/autoload.php';

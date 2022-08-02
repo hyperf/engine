@@ -15,7 +15,7 @@ ARG timezone
 ARG PHP_VERSION
 
 ENV TIMEZONE=${timezone:-"Asia/Shanghai"}
-ENV COMPOSER_ROOT_VERSION="v1.2.0"
+ENV COMPOSER_ROOT_VERSION="v2.0.0"
 
 # update
 RUN set -ex \
@@ -24,7 +24,7 @@ RUN set -ex \
     && php -m \
     && php --ri swoole \
     #  ---------- some config ----------
-    && cd "/etc/php${PHP_VERSION%\.*}" \
+    && cd /etc/php* \
     # - config PHP
     && { \
         echo "upload_max_filesize=128M"; \
