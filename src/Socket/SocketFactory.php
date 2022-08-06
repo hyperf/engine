@@ -14,6 +14,7 @@ namespace Hyperf\Engine\Socket;
 use Hyperf\Engine\Contract\Socket\SocketFactoryInterface;
 use Hyperf\Engine\Contract\Socket\SocketOptionInterface;
 use Hyperf\Engine\Contract\SocketInterface;
+use Hyperf\Engine\Exception\SocketConnectException;
 use Hyperf\Engine\Socket;
 
 class SocketFactory implements SocketFactoryInterface
@@ -26,9 +27,13 @@ class SocketFactory implements SocketFactoryInterface
         }
 
         if ($option->getTimeout() === null) {
-            $socket->connect($option->getHost(), $option->getPort());
+            $res = $socket->connect($option->getHost(), $option->getPort());
         } else {
-            $socket->connect($option->getHost(), $option->getPort(), $option->getTimeout());
+            $res = $socket->connect($option->getHost(), $option->getPort(), $option->getTimeout());
+        }
+
+        if (! $res) {
+            throw new SocketConnectException($socket->errMsg, $socket->errCode);
         }
 
         return $socket;
