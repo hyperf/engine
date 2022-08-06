@@ -20,7 +20,7 @@ interface SocketOptionInterface
     /**
      * Connect timeout, seconds.
      */
-    public function getTimeout(): ?int;
+    public function getTimeout(): ?float;
 
     /**
      * @return [
