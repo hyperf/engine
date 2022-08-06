@@ -46,6 +46,13 @@ class SocketTest extends AbstractTestCase
                 $this->assertSame(SOCKET_ECONNREFUSED, $exception->getCode());
                 $this->assertSame('Connection refused', $exception->getMessage());
             }
+
+            try {
+                (new Socket\SocketFactory())->make(new Socket\SocketOption('192.0.0.1', 9501, 1));
+            } catch (SocketConnectException $exception) {
+                $this->assertSame(SOCKET_ETIMEDOUT, $exception->getCode());
+                $this->assertSame('Operation timed out', $exception->getMessage());
+            }
         });
     }
 
