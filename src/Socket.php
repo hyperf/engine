@@ -11,6 +11,8 @@ declare(strict_types=1);
  */
 namespace Hyperf\Engine;
 
-class Socket extends \Swoole\Coroutine\Socket
+use Hyperf\Engine\Contract\SocketInterface;
+
+class Socket extends \Swoole\Coroutine\Socket implements SocketInterface
 {
 }
