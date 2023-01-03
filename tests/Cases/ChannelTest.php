@@ -82,10 +82,6 @@ class ChannelTest extends AbstractTestCase
 
     public function testPushClosedChannel()
     {
-        if (version_compare(SWOOLE_VERSION, '4.6.0', '<')) {
-            $this->markTestSkipped('The behavior of Swoole #' . SWOOLE_VERSION . ' does not match v4.6');
-        }
-
         $this->runInCoroutine(function () {
             /** @var ChannelInterface $channel */
             $channel = new Channel(10);
