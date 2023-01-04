@@ -13,6 +13,8 @@ namespace HyperfTest\Cases;
 
 use Hyperf\Engine\WebSocket\Frame;
 use Hyperf\Engine\WebSocket\Opcode;
+use Hyperf\Engine\WebSocket\Response;
+use stdClass;
 use Swoole\Coroutine\Http\Client;
 use Swoole\WebSocket\Frame as SwooleFrame;
 
@@ -54,5 +56,18 @@ class WebSocketTest extends AbstractTestCase
         $sf->data = 'Hello World.';
         $frame = Frame::from($sf);
         $this->assertSame($string, (string) $frame);
+    }
+
+    public function testResponseGetFd()
+    {
+        $response = new Response(new stdClass());
+
+        $response->init(123);
+        $this->assertSame(123, $response->getFd());
+
+        $sf = new SwooleFrame();
+        $sf->fd = 1234;
+        $response->init($sf);
+        $this->assertSame(1234, $response->getFd());
     }
 }

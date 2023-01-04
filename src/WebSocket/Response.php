@@ -14,18 +14,22 @@ namespace Hyperf\Engine\WebSocket;
 use Hyperf\Engine\Contract\WebSocket\FrameInterface;
 use Hyperf\Engine\Contract\WebSocket\ResponseInterface;
 use Hyperf\Engine\Exception\InvalidArgumentException;
+use Swoole\Http\Request;
 use Swoole\Http\Response as SwooleResponse;
+use Swoole\WebSOcket\Frame as SwooleFrame;
 use Swoole\WebSocket\Server;
 
 use function Hyperf\Engine\swoole_get_flags_from_frame;
 
 class Response implements ResponseInterface
 {
+    protected int $fd = 0;
+
     public function __construct(protected mixed $connection)
     {
     }
 
-    public function push(FrameInterface $frame, int $fd = 0): bool
+    public function push(FrameInterface $frame): bool
     {
         $data = (string) $frame->getPayloadData();
         $flags = swoole_get_flags_from_frame($frame);
@@ -35,9 +39,28 @@ class Response implements ResponseInterface
         }
 
         if ($this->connection instanceof Server) {
-            $this->connection->push($fd, $data, $frame->getOpcode(), $flags);
+            $this->connection->push($this->fd, $data, $frame->getOpcode(), $flags);
         }
 
         throw new InvalidArgumentException('The websocket connection is invalid.');
+    }
+
+    public function init(mixed $frame): static
+    {
+        switch (true) {
+            case is_int($frame):
+                $this->fd = $frame;
+                break;
+            case $frame instanceof Request || $frame instanceof SwooleFrame:
+                $this->fd = $frame->fd;
+                break;
+        }
+
+        return $this;
+    }
+
+    public function getFd(): int
+    {
+        return $this->fd;
     }
 }
