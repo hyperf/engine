@@ -11,9 +11,10 @@ declare(strict_types=1);
  */
 namespace HyperfTest\Cases;
 
+use Hyperf\Engine\WebSocket\Frame;
 use Hyperf\Engine\WebSocket\Opcode;
 use Swoole\Coroutine\Http\Client;
-use Swoole\WebSocket\Frame;
+use Swoole\WebSocket\Frame as SwooleFrame;
 
 /**
  * @internal
@@ -32,14 +33,21 @@ class WebSocketTest extends AbstractTestCase
 
             $client->push('Hello World!', Opcode::TEXT);
             $ret = $client->recv(1);
-            $this->assertInstanceOf(Frame::class, $ret);
+            $this->assertInstanceOf(SwooleFrame::class, $ret);
             $this->assertSame('received: Hello World!', $ret->data);
             $this->assertSame(Opcode::TEXT, $ret->opcode);
 
             $client->push('', Opcode::PING);
             $ret = $client->recv(1);
-            $this->assertInstanceOf(Frame::class, $ret);
+            $this->assertInstanceOf(SwooleFrame::class, $ret);
             $this->assertSame(Opcode::PONG, $ret->opcode);
         });
+    }
+
+    public function testFrameToString()
+    {
+        $frame = new Frame(payloadData: 'Hello World.');
+
+        $this->assertIsString((string) $frame);
     }
 }
