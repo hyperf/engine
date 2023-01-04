@@ -36,10 +36,12 @@ class Response implements ResponseInterface
 
         if ($this->connection instanceof SwooleResponse) {
             $this->connection->push($data, $frame->getOpcode(), $flags);
+            return true;
         }
 
         if ($this->connection instanceof Server) {
             $this->connection->push($this->fd, $data, $frame->getOpcode(), $flags);
+            return true;
         }
 
         throw new InvalidArgumentException('The websocket connection is invalid.');
