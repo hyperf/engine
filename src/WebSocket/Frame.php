@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace Hyperf\Engine\WebSocket;
 
 use Hyperf\Engine\Contract\WebSocket\FrameInterface;
+use Hyperf\Engine\Exception\InvalidArgumentException;
 use Hyperf\Engine\Http\Stream;
 use Psr\Http\Message\StreamInterface;
 use Swoole\WebSOcket\Frame as SwooleFrame;
@@ -191,6 +192,24 @@ class Frame implements FrameInterface
             (string) $this->getPayloadData(),
             $this->getOpcode(),
             swoole_get_flags_from_frame($this)
+        );
+    }
+
+    public static function from(mixed $frame): static
+    {
+        if (! $frame instanceof SwooleFrame) {
+            throw new InvalidArgumentException('The frame is invalid.');
+        }
+
+        return new static(
+            (bool) ($frame->flags & SWOOLE_WEBSOCKET_FLAG_FIN),
+            (bool) ($frame->flags & SWOOLE_WEBSOCKET_FLAG_RSV1),
+            (bool) ($frame->flags & SWOOLE_WEBSOCKET_FLAG_RSV2),
+            (bool) ($frame->flags & SWOOLE_WEBSOCKET_FLAG_RSV3),
+            $frame->opcode,
+            strlen($frame->data),
+            $frame->flags & SWOOLE_WEBSOCKET_FLAG_MASK ? '258E' : '',
+            $frame->data
         );
     }
 }

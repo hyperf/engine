@@ -48,6 +48,11 @@ class WebSocketTest extends AbstractTestCase
     {
         $frame = new Frame(payloadData: 'Hello World.');
 
-        $this->assertIsString((string) $frame);
+        $this->assertIsString($string = (string) $frame);
+
+        $sf = new SwooleFrame();
+        $sf->data = 'Hello World.';
+        $frame = Frame::from($sf);
+        $this->assertSame($string, (string) $frame);
     }
 }

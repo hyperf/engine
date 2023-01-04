@@ -13,6 +13,9 @@ namespace Hyperf\Engine;
 
 use Hyperf\Engine\Contract\WebSocket\FrameInterface;
 
+/**
+ * @internal
+ */
 function swoole_get_flags_from_frame(FrameInterface $frame): int
 {
     $flags = 0;
