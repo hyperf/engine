@@ -12,15 +12,15 @@
     "autoload": {
         "psr-4": {
             "Hyperf\\Engine\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "HyperfTest\\": "tests"
         },
         "files": [
             "src/Functions.php"
         ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "HyperfTest\\": "tests"
+        }
     },
     "require": {
         "php": ">=8.0",
