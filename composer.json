@@ -8,7 +8,7 @@
         "engine",
         "swoole"
     ],
-    "description": "",
+    "description": "Coroutine engine provided by swoole.",
     "autoload": {
         "psr-4": {
             "Hyperf\\Engine\\": "src/"
