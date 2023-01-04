@@ -201,7 +201,7 @@ class Frame implements FrameInterface
             throw new InvalidArgumentException('The frame is invalid.');
         }
 
-        return new static(
+        return new Frame(
             (bool) ($frame->flags & SWOOLE_WEBSOCKET_FLAG_FIN),
             (bool) ($frame->flags & SWOOLE_WEBSOCKET_FLAG_RSV1),
             (bool) ($frame->flags & SWOOLE_WEBSOCKET_FLAG_RSV2),
