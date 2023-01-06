@@ -66,4 +66,11 @@ class Server implements ServerInterface
 
         $this->server->start();
     }
+
+    public function close(): bool
+    {
+        $this->server->shutdown();
+
+        return true;
+    }
 }
