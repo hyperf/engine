@@ -11,6 +11,7 @@ declare(strict_types=1);
  */
 namespace HyperfTest\Cases;
 
+use Mockery;
 use PHPUnit\Framework\TestCase;
 
 use function Swoole\Coroutine\run;
@@ -20,6 +21,11 @@ use function Swoole\Coroutine\run;
  */
 abstract class AbstractTestCase extends TestCase
 {
+    protected function tearDown(): void
+    {
+        Mockery::close();
+    }
+
     public function runInCoroutine(callable $callable)
     {
         return run($callable);
