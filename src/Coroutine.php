@@ -97,4 +97,9 @@ class Coroutine implements CoroutineInterface
     {
         SwooleCo::defer($callable);
     }
+
+    public static function stats(): array
+    {
+        return SwooleCo::stats();
+    }
 }
