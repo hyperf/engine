@@ -112,4 +112,12 @@ class Coroutine implements CoroutineInterface
     {
         return SwooleCo::resume($id);
     }
+
+    /**
+     * Get the coroutine stats.
+     */
+    public static function stats(): array
+    {
+        return SwooleCo::stats();
+    }
 }

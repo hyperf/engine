@@ -14,7 +14,7 @@ jobs:
       matrix:
         os: [ ubuntu-latest ]
         php-version: [ '8.0', '8.1' ]
-        swoole-version: [ 'v5.0.0', 'master' ]
+        swoole-version: [ 'v5.0.1', 'master' ]
       max-parallel: 16
       fail-fast: false
     env:
