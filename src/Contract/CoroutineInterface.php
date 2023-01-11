@@ -67,4 +67,6 @@ interface CoroutineInterface
      * Execute callback when coroutine destruct.
      */
     public static function defer(callable $callable);
+
+    public static function stats(): array;
 }
