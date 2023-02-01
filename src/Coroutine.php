@@ -45,6 +45,11 @@ class Coroutine implements CoroutineInterface
         return $this;
     }
 
+    public function cancel(int $id):void
+    {
+        SwooleCo::cancel($id);
+    }
+
     public function getId(): int
     {
         if (is_null($this->id)) {
