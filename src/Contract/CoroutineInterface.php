@@ -39,6 +39,8 @@ interface CoroutineInterface
      */
     public static function create(callable $callable, ...$data);
 
+    public static function cancel(int $id);
+
     /**
      * @return int returns coroutine id from current coroutine, -1 in non coroutine environment
      */
