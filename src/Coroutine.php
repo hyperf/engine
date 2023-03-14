@@ -11,6 +11,7 @@ declare(strict_types=1);
  */
 namespace Hyperf\Engine;
 
+use ArrayObject;
 use Hyperf\Engine\Contract\CoroutineInterface;
 use Hyperf\Engine\Exception\CoroutineDestroyedException;
 use Hyperf\Engine\Exception\RunningInNonCoroutineException;
@@ -82,7 +83,7 @@ class Coroutine implements CoroutineInterface
     }
 
     /**
-     * @return null|\ArrayObject
+     * @return null|ArrayObject
      */
     public static function getContextFor(?int $id = null)
     {
@@ -93,13 +94,27 @@ class Coroutine implements CoroutineInterface
         return SwooleCo::getContext($id);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public static function defer(callable $callable)
     {
         SwooleCo::defer($callable);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public static function stats(): array
     {
         return SwooleCo::stats();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function exists(int $id): bool
+    {
+        return SwooleCo::exists($id);
     }
 }

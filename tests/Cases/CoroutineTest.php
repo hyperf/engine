@@ -11,11 +11,13 @@ declare(strict_types=1);
  */
 namespace HyperfTest\Cases;
 
+use ArrayObject;
 use Hyperf\Engine\Channel;
 use Hyperf\Engine\Contract\CoroutineInterface;
 use Hyperf\Engine\Coroutine;
 use Hyperf\Engine\Exception\CoroutineDestroyedException;
 use Hyperf\Engine\Exception\RunningInNonCoroutineException;
+use Throwable;
 
 /**
  * @internal
@@ -51,7 +53,7 @@ class CoroutineTest extends AbstractTestCase
         $this->runInCoroutine(function () {
             $id = uniqid();
             $coroutine = Coroutine::create(function () use ($id) {
-                $this->assertInstanceOf(\ArrayObject::class, Coroutine::getContextFor());
+                $this->assertInstanceOf(ArrayObject::class, Coroutine::getContextFor());
                 $this->assertFalse(isset(Coroutine::getContextFor()['name']));
                 $this->assertSame(null, Coroutine::getContextFor()['name'] ?? null);
                 Coroutine::getContextFor()['name'] = $id;
@@ -111,7 +113,7 @@ class CoroutineTest extends AbstractTestCase
             try {
                 Coroutine::pid($co->getId());
                 $this->assertTrue(false);
-            } catch (\Throwable $exception) {
+            } catch (Throwable $exception) {
                 $this->assertInstanceOf(CoroutineDestroyedException::class, $exception);
             }
         });
