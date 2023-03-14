@@ -68,5 +68,13 @@ interface CoroutineInterface
      */
     public static function defer(callable $callable);
 
+    /**
+     * Get the coroutine stats.
+     */
     public static function stats(): array;
+
+    /**
+     * Check if a couroutine exists or not.
+     */
+    public static function exists(int $id):bool;
 }

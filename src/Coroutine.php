@@ -93,13 +93,27 @@ class Coroutine implements CoroutineInterface
         return SwooleCo::getContext($id);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public static function defer(callable $callable)
     {
         SwooleCo::defer($callable);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public static function stats(): array
     {
         return SwooleCo::stats();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function exists(int $id): bool
+    {
+        return SwooleCo::exists($id);
     }
 }
