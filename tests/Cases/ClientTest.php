@@ -15,6 +15,7 @@ use GuzzleHttp;
 use Hyperf\Engine\Exception\HttpClientException;
 use Hyperf\Engine\Http\Client;
 use Hyperf\Guzzle\CoroutineHandler;
+use Throwable;
 
 /**
  * @internal
@@ -46,7 +47,7 @@ class ClientTest extends AbstractTestCase
                 $client = new Client('127.0.0.1', 9502);
                 $client->request('GET', '/timeout?time=1');
                 $this->assertTrue(false);
-            } catch (\Throwable $exception) {
+            } catch (Throwable $exception) {
                 $this->assertInstanceOf(HttpClientException::class, $exception);
                 $this->assertSame(SOCKET_ECONNREFUSED, $exception->getCode());
                 $this->assertSame('Connection refused', $exception->getMessage());
@@ -84,7 +85,7 @@ class ClientTest extends AbstractTestCase
                 $client->set(['timeout' => 0.1]);
                 $client->request('GET', '/timeout?time=1');
                 $this->assertTrue(false);
-            } catch (\Throwable $exception) {
+            } catch (Throwable $exception) {
                 $this->assertInstanceOf(HttpClientException::class, $exception);
                 $this->assertSame(SOCKET_ETIMEDOUT, $exception->getCode());
                 $this->assertStringContainsString('timed out', $exception->getMessage());

@@ -11,6 +11,7 @@ declare(strict_types=1);
  */
 namespace Hyperf\Engine\Contract;
 
+use ArrayObject;
 use Hyperf\Engine\Exception\CoroutineDestroyedException;
 use Hyperf\Engine\Exception\RunningInNonCoroutineException;
 
@@ -59,7 +60,7 @@ interface CoroutineInterface
 
     /**
      * @param null|int $id coroutine id
-     * @return null|\ArrayObject
+     * @return null|ArrayObject
      */
     public static function getContextFor(?int $id = null);
 
@@ -74,7 +75,7 @@ interface CoroutineInterface
     public static function stats(): array;
 
     /**
-     * Check if a couroutine exists or not.
+     * Check if a coroutine exists or not.
      */
-    public static function exists(int $id):bool;
+    public static function exists(int $id): bool;
 }

@@ -11,6 +11,7 @@ declare(strict_types=1);
  */
 namespace Hyperf\Engine;
 
+use ArrayObject;
 use Hyperf\Engine\Contract\CoroutineInterface;
 use Hyperf\Engine\Exception\CoroutineDestroyedException;
 use Hyperf\Engine\Exception\RunningInNonCoroutineException;
@@ -82,7 +83,7 @@ class Coroutine implements CoroutineInterface
     }
 
     /**
-     * @return null|\ArrayObject
+     * @return null|ArrayObject
      */
     public static function getContextFor(?int $id = null)
     {
