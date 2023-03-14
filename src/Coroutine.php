@@ -124,7 +124,7 @@ class Coroutine implements CoroutineInterface
     /**
      * {@inheritDoc}
      */
-    public static function exists(?int $id = null): bool
+    public static function exists(int $id = null): bool
     {
         return SwooleCo::exists($id);
     }
