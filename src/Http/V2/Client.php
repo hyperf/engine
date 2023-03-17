@@ -49,6 +49,16 @@ class Client implements ClientInterface
         return $this->transformResponse($this->client->recv($timeout));
     }
 
+    public function ping(): bool
+    {
+        return $this->client->ping();
+    }
+
+    public function close(): bool
+    {
+        return $this->client->close();
+    }
+
     private function transformResponse(SwResponse $request): ResponseInterface
     {
         return new Response(
