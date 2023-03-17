@@ -39,6 +39,12 @@ class Http2ClientTest extends AbstractTestCase
             $client->send(new Request('/not-found'));
             $response = $client->recv(1);
             $this->assertSame(404, $response->getStatusCode());
+
+            $this->assertTrue($client->isConnected());
+
+            $client->close();
+
+            $this->assertFalse($client->isConnected());
         });
     }
 }

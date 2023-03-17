@@ -59,6 +59,11 @@ class Client implements ClientInterface
         return $this->client->close();
     }
 
+    public function isConnected(): bool
+    {
+        return $this->client->connected;
+    }
+
     private function transformResponse(SwResponse $request): ResponseInterface
     {
         return new Response(
