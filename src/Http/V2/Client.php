@@ -46,7 +46,17 @@ class Client implements ClientInterface
 
     public function recv(float $timeout = 0): ResponseInterface
     {
+        $response = $this->client->recv($timeout);
+        if ($response === false) {
+            throw new HttpClientException($this->client->errMsg, $this->client->errCode);
+        }
+
         return $this->transformResponse($this->client->recv($timeout));
+    }
+
+    public function write(int $streamId, mixed $data, bool $end = false): bool
+    {
+        return $this->client->write($streamId, $data, $end);
     }
 
     public function ping(): bool
@@ -81,6 +91,7 @@ class Client implements ClientInterface
         $req->path = $request->getPath();
         $req->headers = $request->getHeaders();
         $req->data = $request->getBody();
+        $req->pipeline = $request->isPipeline();
         return $req;
     }
 }
