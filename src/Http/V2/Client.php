@@ -23,9 +23,12 @@ class Client implements ClientInterface
 {
     protected HTTP2Client $client;
 
-    public function __construct(string $host, int $port = 80, bool $ssl = false)
+    public function __construct(string $host, int $port = 80, bool $ssl = false, array $settings = [])
     {
         $this->client = new HTTP2Client($host, $port, $ssl);
+        if ($settings) {
+            $this->client->set($settings);
+        }
         $this->client->connect();
     }
 
