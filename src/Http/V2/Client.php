@@ -67,6 +67,11 @@ class Client implements ClientInterface
         return $this->client->connected;
     }
 
+    public function write(int $streamId, mixed $data, bool $end = false): bool
+    {
+        return $this->client->write($streamId, $data, $end);
+    }
+
     private function transformResponse(SwResponse $request): ResponseInterface
     {
         return new Response(

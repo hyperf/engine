@@ -27,4 +27,6 @@ interface ClientInterface
     public function close(): bool;
 
     public function isConnected(): bool;
+
+    public function write(int $streamId, mixed $data, bool $end = false): bool;
 }
