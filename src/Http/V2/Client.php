@@ -97,6 +97,7 @@ class Client implements ClientInterface
         $req->headers = $request->getHeaders();
         $req->data = $request->getBody();
         $req->pipeline = $request->isPipeline();
+        $req->usePipelineRead = $request->isPipeline();
         return $req;
     }
 }
