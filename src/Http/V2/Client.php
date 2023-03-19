@@ -77,7 +77,7 @@ class Client implements ClientInterface
         return new Response(
             $request->streamId,
             $request->statusCode,
-            $request->headers,
+            $request->headers ?? [],
             $request->data
         );
     }

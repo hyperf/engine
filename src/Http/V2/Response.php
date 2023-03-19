@@ -15,7 +15,7 @@ use Hyperf\Engine\Contract\Http\V2\ResponseInterface;
 
 class Response implements ResponseInterface
 {
-    public function __construct(protected int $streamId, protected int $statusCode, protected ?array $headers, protected ?string $body)
+    public function __construct(protected int $streamId, protected int $statusCode, protected array $headers, protected ?string $body)
     {
     }
 
@@ -29,7 +29,7 @@ class Response implements ResponseInterface
         return $this->statusCode;
     }
 
-    public function getHeaders(): ?array
+    public function getHeaders(): array
     {
         return $this->headers;
     }
