@@ -15,7 +15,7 @@ use Hyperf\Engine\Contract\Http\V2\RequestInterface;
 
 class Request implements RequestInterface
 {
-    public function __construct(protected string $path = '/', protected string $method = 'GET', protected string $body = '', protected array $headers = [])
+    public function __construct(protected string $path = '/', protected string $method = 'GET', protected string $body = '', protected array $headers = [], protected bool $pipeline = false)
     {
     }
 
@@ -57,5 +57,15 @@ class Request implements RequestInterface
     public function setHeaders(array $headers): void
     {
         $this->headers = $headers;
+    }
+
+    public function isPipeline(): bool
+    {
+        return $this->pipeline;
+    }
+
+    public function setPipeline(bool $pipeline): void
+    {
+        $this->pipeline = $pipeline;
     }
 }

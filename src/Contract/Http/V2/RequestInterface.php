@@ -20,4 +20,6 @@ interface RequestInterface
     public function getHeaders(): array;
 
     public function getBody(): string;
+
+    public function isPipeline(): bool;
 }
