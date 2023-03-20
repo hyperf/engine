@@ -14,7 +14,7 @@ jobs:
       matrix:
         os: [ ubuntu-latest ]
         php-version: [ '8.0', '8.1' ]
-        swoole-version: [ 'v4.5.11', 'v4.6.7', 'v4.7.1', 'v4.8.11', 'v5.0.0', 'master' ]
+        swoole-version: [ 'v4.5.11', 'v4.6.7', 'v4.7.1', 'v4.8.11', 'v5.0.2', 'master' ]
         exclude:
           - php-version: '8.1'
             swoole-version: 'v4.5.11'
