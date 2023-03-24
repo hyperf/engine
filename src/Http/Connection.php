@@ -11,11 +11,10 @@ declare(strict_types=1);
  */
 namespace Hyperf\Engine\Http;
 
-use Hyperf\Engine\Contract\Http\Chunkable;
 use Hyperf\Engine\Contract\Http\ConnectionInterface;
 use Swoole\Http\Response;
 
-class Connection implements ConnectionInterface, Chunkable
+class Connection implements ConnectionInterface
 {
     public function __construct(protected Response $response)
     {
