@@ -18,6 +18,9 @@ class Connection implements ConnectionInterface, Chunkable
         return $this->response->write($data);
     }
 
+    /**
+     * @return Response 
+     */
     public function getSocket(): mixed
     {
         return $this->response;
