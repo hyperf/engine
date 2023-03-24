@@ -11,7 +11,11 @@ declare(strict_types=1);
  */
 namespace Hyperf\Engine\Contract\Http;
 
-interface Chunkable
+interface Writable
 {
+    public function getSocket(): mixed;
+
     public function write(string $data): bool;
+
+    public function end(?string $content = null): bool;
 }
