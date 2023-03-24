@@ -33,8 +33,8 @@ class Connection implements ConnectionInterface
         return $this->response;
     }
 
-    public function end(): void
+    public function end(?string $content = null): bool
     {
-        $this->response->end();
+        return $this->response->end();
     }
 }
