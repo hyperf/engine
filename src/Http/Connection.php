@@ -1,10 +1,18 @@
 <?php
 
+declare(strict_types=1);
+/**
+ * This file is part of Hyperf.
+ *
+ * @link     https://www.hyperf.io
+ * @document https://hyperf.wiki
+ * @contact  group@hyperf.io
+ * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
+ */
 namespace Hyperf\Engine\Http;
 
-use Hyperf\Engine\Contract\Http\ConnectionInterface;
 use Hyperf\Engine\Contract\Http\Chunkable;
-
+use Hyperf\Engine\Contract\Http\ConnectionInterface;
 use Swoole\Http\Response;
 
 class Connection implements ConnectionInterface, Chunkable
@@ -19,7 +27,7 @@ class Connection implements ConnectionInterface, Chunkable
     }
 
     /**
-     * @return Response 
+     * @return Response
      */
     public function getSocket(): mixed
     {
