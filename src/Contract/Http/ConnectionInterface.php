@@ -15,5 +15,5 @@ interface ConnectionInterface extends Chunkable
 {
     public function getSocket(): mixed;
 
-    public function end(): void;
+    public function end(?string $content = null): bool;
 }
