@@ -11,10 +11,10 @@ declare(strict_types=1);
  */
 namespace Hyperf\Engine\Http;
 
-use Hyperf\Engine\Contract\Http\ConnectionInterface;
+use Hyperf\Engine\Contract\Http\Writable;
 use Swoole\Http\Response;
 
-class Connection implements ConnectionInterface
+class WritableConnection implements Writable
 {
     public function __construct(protected Response $response)
     {
@@ -33,8 +33,8 @@ class Connection implements ConnectionInterface
         return $this->response;
     }
 
-    public function end(?string $content = null): bool
+    public function end(): bool
     {
-        return $this->response->end($content);
+        return $this->response->end();
     }
 }
