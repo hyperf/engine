@@ -22,6 +22,7 @@ class EventStream
         $socket = $this->connection->getSocket();
         $socket->header('Content-Type', 'text/event-stream; charset=utf-8');
         $socket->header('Transfer-Encoding', 'chunked');
+        $socket->header('Cache-Control', 'no-cache');
     }
 
     public function write(string $data): self
