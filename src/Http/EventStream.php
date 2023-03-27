@@ -9,7 +9,6 @@ declare(strict_types=1);
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
-
 namespace Hyperf\Engine\Http;
 
 use Hyperf\Engine\Contract\Http\Writable;
@@ -17,22 +16,12 @@ use Swoole\Http\Response;
 
 class EventStream
 {
-    protected bool $isTransfer = false;
-
     public function __construct(protected Writable $connection)
     {
-    }
-
-    public function createStream(): self
-    {
-        if (! $this->isTransfer) {
-            /** @var Response $socket */
-            $socket = $this->connection->getSocket();
-            $socket->header('Content-Type', 'text/event-stream; charset=utf-8');
-            $socket->header('Transfer-Encoding', 'chunked');
-        }
-        $this->isTransfer = true;
-        return $this;
+        /** @var Response $socket */
+        $socket = $this->connection->getSocket();
+        $socket->header('Content-Type', 'text/event-stream; charset=utf-8');
+        $socket->header('Transfer-Encoding', 'chunked');
     }
 
     public function write(string $data): self
