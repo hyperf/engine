@@ -25,7 +25,7 @@ class EventStream
         $socket->header('Transfer-Encoding', 'chunked');
         $socket->header('Cache-Control', 'no-cache');
         foreach ($response?->getHeaders() as $name => $values) {
-            $socket->header($name, implode(", ", $values));
+            $socket->header($name, implode(', ', $values));
         }
     }
 
