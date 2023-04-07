@@ -36,6 +36,7 @@
         "swoole/ide-helper": "dev-master"
     },
     "suggest": {
+        "ext-sockets": "*",
         "ext-swoole": ">=5.0",
         "psr/http-message": "Required to use WebSocket Frame.",
         "hyperf/http-message": "Required to use ResponseEmitter."
