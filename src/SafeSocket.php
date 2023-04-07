@@ -35,7 +35,7 @@ class SafeSocket implements SocketInterface
     {
         $this->loop();
 
-        $res = $this->channel->push([$data, $timeout], $timeout ?: -1);
+        $res = $this->channel->push([$data, $timeout], $timeout);
         if ($res === false) {
             if ($this->channel->isClosing()) {
                 throw new SocketClosedException('The channel is closed.');
