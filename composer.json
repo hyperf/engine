@@ -36,6 +36,7 @@
         "swoole/ide-helper": "dev-master"
     },
     "suggest": {
+        "ext-sockets": "*",
         "ext-swoole": ">=5.0",
         "psr/http-message": "Required to use WebSocket Frame.",
         "hyperf/http-message": "Required to use ResponseEmitter."
@@ -51,7 +52,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "2.7-dev"
+            "dev-master": "2.8-dev"
         },
         "hyperf": {
             "config": "Hyperf\\Engine\\ConfigProvider"
