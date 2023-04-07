@@ -11,8 +11,12 @@ declare(strict_types=1);
  */
 namespace HyperfTest\Cases;
 
+use Hyperf\Engine\Exception\SocketClosedException;
 use Hyperf\Engine\Exception\SocketConnectException;
+use Hyperf\Engine\SafeSocket;
 use Hyperf\Engine\Socket;
+use Swoole\Coroutine\Server;
+use Throwable;
 
 /**
  * @internal
@@ -20,23 +24,6 @@ use Hyperf\Engine\Socket;
  */
 class SocketTest extends AbstractTestCase
 {
-    /**
-     * @group Server
-     */
-    // public function testTcpServer()
-    // {
-    //     $socket = new Socket();
-    //     $socket->connect('127.0.0.1', 9502);
-    //     $socket->write([(new Buffer())->write('ping')->rewind()]);
-    //     $socket->recv($buffer = new Buffer());
-    //     $this->assertSame('pong', $buffer->rewind()->getContents());
-    //     usleep(1000);
-    //     $socket->write([(new Buffer())->write('Hello World.')->rewind()]);
-    //     $socket->recv($buffer = new Buffer());
-    //     $this->assertSame('recv: Hello World.', $buffer->rewind()->getContents());
-    //     $this->assertSame('recv: Hello World.', (string) $buffer);
-    // }
-
     public function testSocketConnectFailed()
     {
         $this->runInCoroutine(function () {
@@ -117,6 +104,69 @@ class SocketTest extends AbstractTestCase
             $this->assertSame($len, unpack('Nlen', $res)['len']);
             $res = $socket->recvAll($len);
             $this->assertSame('recv:' . $id, $res);
+        });
+    }
+
+    public function testSafeSocketSendAndRecvPacket()
+    {
+        $this->runInCoroutine(function () {
+            $server = new Server('0.0.0.0', 9506);
+            $p = function (string $data): string {
+                return pack('N', strlen($data)) . $data;
+            };
+            go(function () use ($server, $p) {
+                $server->set([
+                    'open_length_check' => true,
+                    'package_max_length' => 1024 * 1024 * 2,
+                    'package_length_type' => 'N',
+                    'package_length_offset' => 0,
+                    'package_body_offset' => 4,
+                ]);
+                $server->handle(function (Server\Connection $connection) use ($p) {
+                    $socket = new SafeSocket($connection->exportSocket(), 65535);
+                    // $socket = $connection->exportSocket();
+                    while (true) {
+                        try {
+                            $body = $socket->recvPacket();
+                            if (empty($body)) {
+                                break;
+                            }
+                            go(function () use ($socket, $body, $p) {
+                                $body = substr($body, 4);
+                                if ($body === 'ping') {
+                                    $socket->sendAll($p('pong'));
+                                } else {
+                                    $socket->sendAll($p($body));
+                                }
+                            });
+                        } catch (Throwable $exception) {
+                            $this->assertInstanceOf(SocketClosedException::class, $exception);
+                            break;
+                        }
+                    }
+                });
+                $server->start();
+            });
+
+            sleep(1);
+
+            $socket = (new Socket\SocketFactory())->make(new Socket\SocketOption('127.0.0.1', 9506, protocol: [
+                'open_length_check' => true,
+                'package_max_length' => 1024 * 1024 * 2,
+                'package_length_type' => 'N',
+                'package_length_offset' => 0,
+                'package_body_offset' => 4,
+            ]));
+
+            for ($i = 0; $i < 200; ++$i) {
+                $res = $socket->sendAll($p(str_repeat('s', 10240)), 1);
+            }
+
+            for ($i = 0; $i < 200; ++$i) {
+                $socket->recvPacket(1);
+            }
+
+            $server->shutdown();
         });
     }
 }

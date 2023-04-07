@@ -14,14 +14,13 @@ namespace Hyperf\Engine;
 use Hyperf\Engine\Contract\SocketInterface;
 use Hyperf\Engine\Exception\SocketClosedException;
 use Hyperf\Engine\Exception\SocketTimeoutException;
+use Swoole\Coroutine\Socket;
 
 class SafeSocket implements SocketInterface
 {
     protected Channel $channel;
 
-    protected int $id = 0;
-
-    protected array $options = [];
+    protected bool $loop = false;
 
     public function __construct(protected Socket $socket, int $capacity = 65535)
     {
@@ -34,24 +33,24 @@ class SafeSocket implements SocketInterface
      */
     public function sendAll(string $data, float $timeout = 0): int|false
     {
-        $id = $this->id++;
-        try {
-            $this->options[$id] = true;
-            $res = $this->channel->push([$id, $data, $timeout], $timeout);
-            if ($res === false) {
-                if ($this->channel->isClosing()) {
-                    throw new SocketClosedException('The channel is closed.');
-                }
-                if ($this->channel->isTimeout()) {
-                    throw new SocketTimeoutException('The channel is full.');
-                }
+        $this->loop();
+
+        $res = $this->channel->push([$data, $timeout], $timeout ?: -1);
+        if ($res === false) {
+            if ($this->channel->isClosing()) {
+                throw new SocketClosedException('The channel is closed.');
             }
-            return strlen($data);
-        } finally {
-            unset($this->options[$id]);
+            if ($this->channel->isTimeout()) {
+                throw new SocketTimeoutException('The channel is full.');
+            }
         }
+        return strlen($data);
     }
 
+    /**
+     * @throws SocketTimeoutException when send data timeout
+     * @throws SocketClosedException when the client is closed
+     */
     public function recvAll(int $length = 65536, float $timeout = 0): string|false
     {
         $res = $this->socket->recvAll($length, $timeout);
@@ -67,6 +66,10 @@ class SafeSocket implements SocketInterface
         return $res;
     }
 
+    /**
+     * @throws SocketTimeoutException when send data timeout
+     * @throws SocketClosedException when the client is closed
+     */
     public function recvPacket(float $timeout = 0): string|false
     {
         $res = $this->socket->recvPacket($timeout);
@@ -89,8 +92,14 @@ class SafeSocket implements SocketInterface
         return $this->socket->close();
     }
 
-    protected function loop()
+    protected function loop(): void
     {
+        if ($this->loop) {
+            return;
+        }
+
+        $this->loop = true;
+
         go(function () {
             while (true) {
                 $data = $this->channel->pop(-1);
@@ -98,12 +107,12 @@ class SafeSocket implements SocketInterface
                     return;
                 }
 
-                [$id, $data, $timeout] = $data;
-                if (! isset($this->options[$id])) {
-                    continue;
-                }
+                [$data, $timeout] = $data;
 
-                $this->socket->sendAll($data, $timeout);
+                $res = $this->socket->sendAll($data, $timeout);
+                if ($res === false) {
+                    var_dump($this->socket->errCode);
+                }
             }
         });
     }
