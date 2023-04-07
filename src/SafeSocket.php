@@ -109,10 +109,7 @@ class SafeSocket implements SocketInterface
 
                 [$data, $timeout] = $data;
 
-                $res = $this->socket->sendAll($data, $timeout);
-                if ($res === false) {
-                    var_dump($this->socket->errCode);
-                }
+                $this->socket->sendAll($data, $timeout);
             }
         });
     }
