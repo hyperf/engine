@@ -22,7 +22,7 @@ class SafeSocket implements SocketInterface
 
     protected bool $loop = false;
 
-    public function __construct(protected Socket $socket, int $capacity = 65535)
+    public function __construct(protected Socket $socket, int $capacity = 65535, protected bool $throw = true)
     {
         $this->channel = new Channel($capacity);
     }
@@ -38,11 +38,13 @@ class SafeSocket implements SocketInterface
         $res = $this->channel->push([$data, $timeout], $timeout);
         if ($res === false) {
             if ($this->channel->isClosing()) {
-                throw new SocketClosedException('The channel is closed.');
+                $this->throw && throw new SocketClosedException('The channel is closed.');
             }
             if ($this->channel->isTimeout()) {
-                throw new SocketTimeoutException('The channel is full.');
+                $this->throw && throw new SocketTimeoutException('The channel is full.');
             }
+
+            return false;
         }
         return strlen($data);
     }
@@ -56,11 +58,10 @@ class SafeSocket implements SocketInterface
         $res = $this->socket->recvAll($length, $timeout);
         if (! $res) {
             if ($this->socket->errCode === SOCKET_ETIMEDOUT) {
-                throw new SocketTimeoutException('Recv timeout');
+                $this->throw && throw new SocketTimeoutException('Recv timeout');
             }
 
-            $this->close();
-            throw new SocketClosedException('The socket is closed.');
+            $this->throw && throw new SocketClosedException('The socket is closed.');
         }
 
         return $res;
@@ -75,11 +76,10 @@ class SafeSocket implements SocketInterface
         $res = $this->socket->recvPacket($timeout);
         if (! $res) {
             if ($this->socket->errCode === SOCKET_ETIMEDOUT) {
-                throw new SocketTimeoutException('Recv timeout');
+                $this->throw && throw new SocketTimeoutException('Recv timeout');
             }
 
-            $this->close();
-            throw new SocketClosedException('The socket is closed.');
+            $this->throw && throw new SocketClosedException('The socket is closed.');
         }
 
         return $res;
