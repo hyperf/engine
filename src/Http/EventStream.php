@@ -23,7 +23,7 @@ class EventStream
         $socket->header('Content-Type', 'text/event-stream; charset=utf-8');
         $socket->header('Transfer-Encoding', 'chunked');
         $socket->header('Cache-Control', 'no-cache');
-        foreach ($response?->getHeaders() as $name => $values) {
+        foreach ($response?->getHeaders() ?? [] as $name => $values) {
             $socket->header($name, implode(", ", $values));
         }
     }
