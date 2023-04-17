@@ -55,9 +55,6 @@ class Coroutine implements CoroutineInterface
 
     public static function id(): int
     {
-        if (! class_exists(SwooleCo::class)) {
-            return 0;
-        }
         return SwooleCo::getCid();
     }
 
