@@ -53,7 +53,7 @@ class Stream implements StreamInterface, Stringable
     /**
      * Closes the stream and any underlying resources.
      */
-    public function close()
+    public function close(): void
     {
         $this->detach();
     }
@@ -78,7 +78,7 @@ class Stream implements StreamInterface, Stringable
      *
      * @return null|int returns the size in bytes if known, or null if unknown
      */
-    public function getSize()
+    public function getSize(): ?int
     {
         if (! $this->size) {
             $this->size = strlen($this->getContents());
@@ -92,7 +92,7 @@ class Stream implements StreamInterface, Stringable
      * @return int Position of the file pointer
      * @throws RuntimeException on error
      */
-    public function tell()
+    public function tell(): int
     {
         throw new RuntimeException('Cannot determine the position of a SwooleStream');
     }
@@ -102,7 +102,7 @@ class Stream implements StreamInterface, Stringable
      *
      * @return bool
      */
-    public function eof()
+    public function eof(): bool
     {
         return $this->getSize() === 0;
     }
@@ -112,7 +112,7 @@ class Stream implements StreamInterface, Stringable
      *
      * @return bool
      */
-    public function isSeekable()
+    public function isSeekable(): bool
     {
         return false;
     }
@@ -129,7 +129,7 @@ class Stream implements StreamInterface, Stringable
      *                    SEEK_END: Set position to end-of-stream plus offset.
      * @throws RuntimeException on failure
      */
-    public function seek($offset, $whence = SEEK_SET)
+    public function seek($offset, $whence = SEEK_SET): void
     {
         throw new RuntimeException('Cannot seek a SwooleStream');
     }
@@ -139,11 +139,11 @@ class Stream implements StreamInterface, Stringable
      * If the stream is not seekable, this method will raise an exception;
      * otherwise, it will perform a seek(0).
      *
-     * @see seek()
-     * @see http://www.php.net/manual/en/function.fseek.php
      * @throws RuntimeException on failure
+     * @see http://www.php.net/manual/en/function.fseek.php
+     * @see seek()
      */
-    public function rewind()
+    public function rewind(): void
     {
         $this->seek(0);
     }
@@ -153,7 +153,7 @@ class Stream implements StreamInterface, Stringable
      *
      * @return bool
      */
-    public function isWritable()
+    public function isWritable(): bool
     {
         return $this->writable;
     }
@@ -165,7 +165,7 @@ class Stream implements StreamInterface, Stringable
      * @return int returns the number of bytes written to the stream
      * @throws RuntimeException on failure
      */
-    public function write($string)
+    public function write($string): int
     {
         if (! $this->writable) {
             throw new RuntimeException('Cannot write to a non-writable stream');
@@ -184,7 +184,7 @@ class Stream implements StreamInterface, Stringable
      *
      * @return bool
      */
-    public function isReadable()
+    public function isReadable(): bool
     {
         return true;
     }
@@ -199,7 +199,7 @@ class Stream implements StreamInterface, Stringable
      *                if no bytes are available
      * @throws RuntimeException if an error occurs
      */
-    public function read($length)
+    public function read($length): string
     {
         if ($length >= $this->getSize()) {
             $result = $this->contents;
@@ -221,7 +221,7 @@ class Stream implements StreamInterface, Stringable
      * @throws RuntimeException if unable to read or an error occurs while
      *                          reading
      */
-    public function getContents()
+    public function getContents(): string
     {
         return $this->contents;
     }
