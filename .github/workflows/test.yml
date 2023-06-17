@@ -51,7 +51,7 @@ jobs:
         run: |
           if [ v${{ matrix.php-version }} = 'v8.2' ]
           then
-            docker build . -t swoole:latest --build-arg PHP_VERSION=${{ matrix.php-version }} --build-arg ALPINE_VERSION=vedge
+            docker build . -t swoole:latest --build-arg PHP_VERSION=${{ matrix.php-version }} --build-arg ALPINE_VERSION=v3.18
           else
             docker build . -t swoole:latest --build-arg PHP_VERSION=${{ matrix.php-version }} --build-arg ALPINE_VERSION=v3.16
           fi
