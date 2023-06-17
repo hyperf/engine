@@ -15,7 +15,7 @@ use Hyperf\Engine\Contract\WebSocket\FrameInterface;
 use Hyperf\Engine\Exception\InvalidArgumentException;
 use Hyperf\Engine\Http\Stream;
 use Psr\Http\Message\StreamInterface;
-use Swoole\WebSOcket\Frame as SwooleFrame;
+use Swoole\WebSocket\Frame as SwooleFrame;
 
 use function Hyperf\Engine\swoole_get_flags_from_frame;
 
