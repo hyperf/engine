@@ -99,8 +99,6 @@ class Stream implements StreamInterface, Stringable
 
     /**
      * Returns true if the stream is at the end of the stream.
-     *
-     * @return bool
      */
     public function eof(): bool
     {
@@ -109,8 +107,6 @@ class Stream implements StreamInterface, Stringable
 
     /**
      * Returns whether or not the stream is seekable.
-     *
-     * @return bool
      */
     public function isSeekable(): bool
     {
@@ -150,8 +146,6 @@ class Stream implements StreamInterface, Stringable
 
     /**
      * Returns whether or not the stream is writable.
-     *
-     * @return bool
      */
     public function isWritable(): bool
     {
@@ -181,8 +175,6 @@ class Stream implements StreamInterface, Stringable
 
     /**
      * Returns whether or not the stream is readable.
-     *
-     * @return bool
      */
     public function isReadable(): bool
     {
@@ -217,7 +209,6 @@ class Stream implements StreamInterface, Stringable
     /**
      * Returns the remaining contents in a string.
      *
-     * @return string
      * @throws RuntimeException if unable to read or an error occurs while
      *                          reading
      */

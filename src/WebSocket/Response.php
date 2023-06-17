@@ -65,4 +65,17 @@ class Response implements ResponseInterface
     {
         return $this->fd;
     }
+
+    public function close(): bool
+    {
+        if ($this->connection instanceof SwooleResponse) {
+            return $this->connection->close();
+        }
+
+        if ($this->connection instanceof Server) {
+            return $this->connection->disconnect($this->fd);
+        }
+
+        return false;
+    }
 }
