@@ -125,4 +125,9 @@ class Coroutine implements CoroutineInterface
     {
         return SwooleCo::exists($id);
     }
+
+    public static function hookFlags(): int
+    {
+        return SWOOLE_HOOK_ALL;
+    }
 }
