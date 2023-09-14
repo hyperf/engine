@@ -40,11 +40,6 @@ class Coroutine implements CoroutineInterface
         return $coroutine;
     }
 
-    public static function isAvailable(): bool
-    {
-        return class_exists(SwooleCo::class);
-    }
-
     public function execute(...$data): static
     {
         $this->id = SwooleCo::create($this->callable, ...$data);
