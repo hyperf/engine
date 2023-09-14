@@ -9,6 +9,7 @@ declare(strict_types=1);
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
+
 namespace Hyperf\Engine;
 
 use ArrayObject;
@@ -37,6 +38,11 @@ class Coroutine implements CoroutineInterface
         $coroutine = new static($callable);
         $coroutine->execute(...$data);
         return $coroutine;
+    }
+
+    public static function isCoroutineAvailable(): bool
+    {
+        return class_exists(SwooleCo::class);
     }
 
     public function execute(...$data): static
