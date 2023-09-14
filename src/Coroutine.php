@@ -40,7 +40,7 @@ class Coroutine implements CoroutineInterface
         return $coroutine;
     }
 
-    public static function isCoroutineAvailable(): bool
+    public static function isAvailable(): bool
     {
         return class_exists(SwooleCo::class);
     }
