@@ -9,12 +9,14 @@ declare(strict_types=1);
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
+
 namespace Hyperf\Engine\Http;
 
 use BadMethodCallException;
 use Hyperf\Engine\Exception\RuntimeException;
 use Psr\Http\Message\StreamInterface;
 use Stringable;
+use Throwable;
 
 class Stream implements StreamInterface, Stringable
 {
@@ -45,7 +47,7 @@ class Stream implements StreamInterface, Stringable
     {
         try {
             return $this->getContents();
-        } catch (\Throwable) {
+        } catch (Throwable) {
             return '';
         }
     }
