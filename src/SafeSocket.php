@@ -101,7 +101,7 @@ class SafeSocket implements SocketInterface
 
         $this->loop = true;
 
-        go(function () {
+        Coroutine::create(function () {
             while (true) {
                 $data = $this->channel->pop(-1);
                 if ($this->channel->isClosing()) {
