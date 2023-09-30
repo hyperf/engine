@@ -25,10 +25,12 @@ class SafeSocket implements SocketInterface
 
     protected bool $loop = false;
 
-    protected ?LoggerInterface $logger = null;
-
-    public function __construct(protected Socket $socket, int $capacity = 65535, protected bool $throw = true)
-    {
+    public function __construct(
+        protected Socket $socket,
+        int $capacity = 65535,
+        protected bool $throw = true,
+        protected ?LoggerInterface $logger = null
+    ) {
         $this->channel = new Channel($capacity);
     }
 
