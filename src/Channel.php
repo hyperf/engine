@@ -15,15 +15,27 @@ namespace Hyperf\Engine;
 use Hyperf\Engine\Contract\ChannelInterface;
 use Hyperf\Engine\Exception\RuntimeException;
 
+/**
+ * @template TValue of mixed
+ * @implements ChannelInterface
+ */
 class Channel extends \Swoole\Coroutine\Channel implements ChannelInterface
 {
     protected bool $closed = false;
 
+    /**
+     * @param TValue $data
+     * @param float|int $timeout seconds [optional] = -1
+     */
     public function push(mixed $data, float $timeout = -1): bool
     {
         return parent::push($data, $timeout);
     }
 
+    /**
+     * @param float $timeout seconds [optional] = -1
+     * @return false|TValue when pop failed, return false
+     */
     public function pop(float $timeout = -1): mixed
     {
         return parent::pop($timeout);
