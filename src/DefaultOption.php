@@ -18,6 +18,6 @@ class DefaultOption implements DefaultOptionInterface
 {
     public static function hookFlags(): int
     {
-        return SWOOLE_HOOK_ALL;
+        return defined('SWOOLE_HOOK_ALL') ? SWOOLE_HOOK_ALL : 0;
     }
 }
