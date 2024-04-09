@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace Hyperf\Engine\WebSocket;
 
-use Hyperf\Contract\StdoutLoggerInterface;
 use Hyperf\Engine\Contract\WebSocket\WebSocketInterface;
+use Psr\Log\LoggerInterface;
 use Swoole\Http\Request;
 use Swoole\Http\Response;
 use Swoole\WebSocket\CloseFrame;
@@ -28,7 +28,7 @@ class WebSocket implements WebSocketInterface
      */
     protected array $events = [];
 
-    public function __construct(Response $connection, Request $request, protected ?StdoutLoggerInterface $logger = null)
+    public function __construct(Response $connection, Request $request, protected ?LoggerInterface $logger = null)
     {
         $this->connection = $connection;
         $this->connection->upgrade();
