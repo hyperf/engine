@@ -15,6 +15,7 @@ namespace HyperfTest\Cases;
 use Hyperf\Engine\Channel;
 use Hyperf\Engine\Contract\ChannelInterface;
 use Hyperf\Engine\Coroutine;
+use stdClass;
 
 /**
  * @internal
@@ -180,6 +181,18 @@ class ChannelTest extends AbstractTestCase
             $this->assertTrue($channel->isClosing());
             $this->assertFalse($channel->isTimeout());
             $this->assertFalse($channel->isAvailable());
+        });
+    }
+
+    public function testSplId()
+    {
+        $this->runInCoroutine(function () {
+            $obj = new stdClass();
+            $chan = new Channel(1);
+            $chan->push($obj);
+
+            $this->assertSame(spl_object_id($obj), spl_object_id($assert = $chan->pop()));
+            $this->assertSame(spl_object_hash($obj), spl_object_hash($assert));
         });
     }
 }

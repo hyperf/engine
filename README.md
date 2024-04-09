@@ -1,6 +1,6 @@
 # Swoole Engine
 
-![Swoole Engine Test](https://github.com/hyperf/engine/workflows/Swoole%20Engine%20Test/badge.svg)
+[![Swoole Engine Test](https://github.com/hyperf/engine/actions/workflows/test.yml/badge.svg)](https://github.com/hyperf/engine/actions/workflows/test.yml)
 
 ```
 composer require hyperf/engine

@@ -11,6 +11,7 @@ declare(strict_types=1);
  */
 use Hyperf\Engine\Coroutine;
 use Swoole\Coroutine\Server;
+use Swoole\Coroutine\Server\Connection;
 
 use function Swoole\Coroutine\run;
 
@@ -33,7 +34,7 @@ run(function () {
         'package_length_offset' => 0,
         'package_body_offset' => 4,
     ]);
-    $server->handle(function (Server\Connection $connection) {
+    $server->handle(function (Connection $connection) {
         $socket = $connection->exportSocket();
         while (true) {
             $body = $socket->recvPacket();

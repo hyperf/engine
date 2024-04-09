@@ -15,7 +15,9 @@ namespace Hyperf\Engine;
 use Hyperf\Engine\Contract\SocketInterface;
 use Hyperf\Engine\Exception\SocketClosedException;
 use Hyperf\Engine\Exception\SocketTimeoutException;
+use Psr\Log\LoggerInterface;
 use Swoole\Coroutine\Socket;
+use Throwable;
 
 class SafeSocket implements SocketInterface
 {
@@ -23,8 +25,12 @@ class SafeSocket implements SocketInterface
 
     protected bool $loop = false;
 
-    public function __construct(protected Socket $socket, int $capacity = 65535, protected bool $throw = true)
-    {
+    public function __construct(
+        protected Socket $socket,
+        int $capacity = 65535,
+        protected bool $throw = true,
+        protected ?LoggerInterface $logger = null
+    ) {
         $this->channel = new Channel($capacity);
     }
 
@@ -93,6 +99,12 @@ class SafeSocket implements SocketInterface
         return $this->socket->close();
     }
 
+    public function setLogger(?LoggerInterface $logger): static
+    {
+        $this->logger = $logger;
+        return $this;
+    }
+
     protected function loop(): void
     {
         if ($this->loop) {
@@ -101,16 +113,20 @@ class SafeSocket implements SocketInterface
 
         $this->loop = true;
 
-        go(function () {
-            while (true) {
-                $data = $this->channel->pop(-1);
-                if ($this->channel->isClosing()) {
-                    return;
+        Coroutine::create(function () {
+            try {
+                while (true) {
+                    $data = $this->channel->pop(-1);
+                    if ($this->channel->isClosing()) {
+                        return;
+                    }
+
+                    [$data, $timeout] = $data;
+
+                    $this->socket->sendAll($data, $timeout);
                 }
-
-                [$data, $timeout] = $data;
-
-                $this->socket->sendAll($data, $timeout);
+            } catch (Throwable $exception) {
+                $this->logger?->critical((string) $exception);
             }
         });
     }
