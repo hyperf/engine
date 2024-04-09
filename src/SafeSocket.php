@@ -32,7 +32,7 @@ class SafeSocket implements SocketInterface
      * @throws SocketTimeoutException when send data timeout
      * @throws SocketClosedException when the client is closed
      */
-    public function sendAll(string $data, float $timeout = 0): int|false
+    public function sendAll(string $data, float $timeout = 0): false|int
     {
         $this->loop();
 
@@ -54,7 +54,7 @@ class SafeSocket implements SocketInterface
      * @throws SocketTimeoutException when send data timeout
      * @throws SocketClosedException when the client is closed
      */
-    public function recvAll(int $length = 65536, float $timeout = 0): string|false
+    public function recvAll(int $length = 65536, float $timeout = 0): false|string
     {
         $res = $this->socket->recvAll($length, $timeout);
         if (! $res) {
@@ -72,7 +72,7 @@ class SafeSocket implements SocketInterface
      * @throws SocketTimeoutException when send data timeout
      * @throws SocketClosedException when the client is closed
      */
-    public function recvPacket(float $timeout = 0): string|false
+    public function recvPacket(float $timeout = 0): false|string
     {
         $res = $this->socket->recvPacket($timeout);
         if (! $res) {

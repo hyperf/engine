@@ -11,6 +11,8 @@ declare(strict_types=1);
  */
 use Hyperf\Engine\Coroutine;
 use Swoole\Coroutine\Http\Server;
+use Swoole\Http\Request;
+use Swoole\Http\Response;
 
 use function Swoole\Coroutine\run;
 
@@ -21,7 +23,7 @@ Coroutine::set([
 
 $callback = function () {
     $server = new Server('0.0.0.0', 9501);
-    $server->handle('/', function (Swoole\Http\Request $request, Swoole\Http\Response $response) {
+    $server->handle('/', function (Request $request, Response $response) {
         $response->setHeader('Server', 'Hyperf');
         switch ($request->server['request_uri']) {
             case '/':
