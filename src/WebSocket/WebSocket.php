@@ -53,10 +53,9 @@ class WebSocket implements WebSocketInterface
                         swoole_strerror(swoole_last_error(), 9)
                     )
                 );
-                break;
             }
 
-            if ($frame instanceof CloseFrame || $frame === '') {
+            if ($frame === false || $frame instanceof CloseFrame || $frame === '') {
                 if ($callback = $this->events[static::ON_CLOSE] ?? null) {
                     $callback($this->connection, $this->connection->fd);
                 }
