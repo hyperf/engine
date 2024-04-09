@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace Hyperf\Engine\WebSocket;
 
+use Hyperf\Contract\StdoutLoggerInterface;
 use Hyperf\Engine\Contract\WebSocket\WebSocketInterface;
 use Swoole\Http\Request;
 use Swoole\Http\Response;
@@ -27,7 +28,7 @@ class WebSocket implements WebSocketInterface
      */
     protected array $events = [];
 
-    public function __construct(Response $connection, Request $request)
+    public function __construct(Response $connection, Request $request, protected ?StdoutLoggerInterface $logger = null)
     {
         $this->connection = $connection;
         $this->connection->upgrade();
@@ -42,8 +43,20 @@ class WebSocket implements WebSocketInterface
     {
         while (true) {
             /** @var false|string|SwFrame $frame */
-            $frame = $this->connection->recv();
-            if ($frame === false || $frame instanceof CloseFrame || $frame === '') {
+            $frame = $this->connection->recv(-1);
+            if ($frame === false) {
+                $this->logger?->warning(
+                    sprintf(
+                        '%s:(%s) %s',
+                        'Websocket recv failed:',
+                        swoole_last_error(),
+                        swoole_strerror(swoole_last_error(), 9)
+                    )
+                );
+                break;
+            }
+
+            if ($frame instanceof CloseFrame || $frame === '') {
                 if ($callback = $this->events[static::ON_CLOSE] ?? null) {
                     $callback($this->connection, $this->connection->fd);
                 }
