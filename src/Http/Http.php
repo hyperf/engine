@@ -17,7 +17,7 @@ use Stringable;
 
 class Http implements HttpContract
 {
-    public static function packRequest(string $method, string|Stringable $uri, array $headers = [], string|Stringable $body = '', string $protocolVersion = HttpContract::DEFAULT_PROTOCOL_VERSION): string
+    public static function packRequest(string $method, string|Stringable $path, array $headers = [], string|Stringable $body = '', string $protocolVersion = HttpContract::DEFAULT_PROTOCOL_VERSION): string
     {
         $headerString = '';
         foreach ($headers as $key => $values) {
@@ -29,7 +29,7 @@ class Http implements HttpContract
         return sprintf(
             "%s %s HTTP/%s\r\n%s\r\n%s",
             $method,
-            $uri,
+            $path,
             $protocolVersion,
             $headerString,
             $body
