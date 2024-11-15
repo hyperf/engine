@@ -36,7 +36,7 @@ class EventStream
         return $this;
     }
 
-    public function end(): void
+    public function end(): bool
     {
         $this->connection->end();
     }
