@@ -34,7 +34,7 @@ class WritableConnection implements Writable
         return $this->response;
     }
 
-    public function end(): bool
+    public function end(): ?bool
     {
         return $this->response->end();
     }
