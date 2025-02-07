@@ -9,7 +9,6 @@ declare(strict_types=1);
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
-
 namespace Hyperf\Engine;
 
 use ArrayObject;
@@ -125,5 +124,13 @@ class Coroutine implements CoroutineInterface
     public static function exists(?int $id = null): bool
     {
         return SwooleCo::exists($id);
+    }
+
+    /**
+     * @return iterable<int>
+     */
+    public static function list(): iterable
+    {
+        return SwooleCo::list();
     }
 }
