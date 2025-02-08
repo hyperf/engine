@@ -194,7 +194,6 @@ class CoroutineTest extends AbstractTestCase
         $this->runInCoroutine(function () {
             $list = Coroutine::list();
             $this->assertIsIterable($list);
-            $this->assertNotEmpty($list);
             $this->assertContains(Coroutine::id(), $list);
         });
 
@@ -208,7 +207,7 @@ class CoroutineTest extends AbstractTestCase
             Coroutine::create(function () {
                 sleep(1);
             });
-            $this->assertCount(4, Coroutine::list());
+            $this->assertEquals(4, iterator_count(Coroutine::list()));
         });
     }
 }
