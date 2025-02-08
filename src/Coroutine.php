@@ -132,6 +132,8 @@ class Coroutine implements CoroutineInterface
      */
     public static function list(): iterable
     {
-        yield from SwooleCo::list();
+        foreach (SwooleCo::list() as $cid) {
+            yield $cid;
+        }
     }
 }
