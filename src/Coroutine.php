@@ -132,6 +132,6 @@ class Coroutine implements CoroutineInterface
      */
     public static function list(): iterable
     {
-        return SwooleCo::list();
+        yield from SwooleCo::list();
     }
 }
