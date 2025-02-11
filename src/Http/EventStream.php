@@ -35,8 +35,8 @@ class EventStream
         return $this->connection->write($data);
     }
 
-    public function end(): void
+    public function end(): ?bool
     {
-        $this->connection->end();
+        return $this->connection->end();
     }
 }
