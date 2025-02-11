@@ -30,14 +30,13 @@ class EventStream
         }
     }
 
-    public function write(string $data): self
+    public function write(string $data): bool
     {
-        $this->connection->write($data);
-        return $this;
+        return $this->connection->write($data);
     }
 
-    public function end(): void
+    public function end(): ?bool
     {
-        $this->connection->end();
+        return $this->connection->end();
     }
 }
