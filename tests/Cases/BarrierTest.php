@@ -29,6 +29,7 @@ class BarrierTest extends AbstractTestCase
             $count = 0;
             for ($i = 0; $i < $N; ++$i) {
                 Coroutine::create(function () use (&$count, $barrier) {
+                    isset($barrier);
                     usleep(2000);
                     ++$count;
                 });
