@@ -16,7 +16,7 @@ use Hyperf\Engine\Contract\Http\V2\ResponseInterface;
 
 class Response implements ResponseInterface
 {
-    public function __construct(protected int $streamId, protected int $statusCode, protected array $headers, protected ?string $body, protected ?array $cookies)
+    public function __construct(protected int $streamId, protected int $statusCode, protected array $headers, protected ?string $body)
     {
     }
 
@@ -38,10 +38,5 @@ class Response implements ResponseInterface
     public function getBody(): ?string
     {
         return $this->body;
-    }
-
-    public function getCookies(): ?array
-    {
-        return $this->cookies;
     }
 }

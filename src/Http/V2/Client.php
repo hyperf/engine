@@ -87,7 +87,6 @@ class Client implements ClientInterface
             $response->statusCode,
             $response->headers ?? [],
             $response->data,
-            $response->cookies ?? []
         );
     }
 
