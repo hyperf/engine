@@ -80,13 +80,14 @@ class Client implements ClientInterface
         return $this->client->connected;
     }
 
-    private function transformResponse(SwResponse $request): ResponseInterface
+    private function transformResponse(SwResponse $response): ResponseInterface
     {
         return new Response(
-            $request->streamId,
-            $request->statusCode,
-            $request->headers ?? [],
-            $request->data
+            $response->streamId,
+            $response->statusCode,
+            $response->headers ?? [],
+            $response->data,
+            $response->cookies ?? []
         );
     }
 
