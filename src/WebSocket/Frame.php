@@ -171,7 +171,7 @@ class Frame implements FrameInterface
         return (clone $this)->setMaskingKey($maskingKey);
     }
 
-    public function getPayloadData(): StreamInterface
+    public function getPayloadData(): ?StreamInterface
     {
         return $this->payloadData;
     }
