@@ -32,7 +32,7 @@ class Frame implements FrameInterface
      */
     public const PONG = '278a0027';
 
-    protected ?StreamInterface $payloadData = null;
+    protected StreamInterface $payloadData;
 
     public function __construct(
         protected bool $fin = true,
@@ -44,9 +44,7 @@ class Frame implements FrameInterface
         protected string $maskingKey = '',
         mixed $payloadData = '',
     ) {
-        if ($payloadData !== null && $payloadData !== '') {
-            $this->setPayloadData($payloadData);
-        }
+        $this->setPayloadData($payloadData);
     }
 
     public function __toString()
@@ -136,7 +134,7 @@ class Frame implements FrameInterface
 
     public function getPayloadLength(): int
     {
-        return $this->payloadData?->getSize() ?? 0;
+        return $this->payloadData->getSize() ?? 0;
     }
 
     public function setPayloadLength(int $payloadLength): static
@@ -171,7 +169,7 @@ class Frame implements FrameInterface
         return (clone $this)->setMaskingKey($maskingKey);
     }
 
-    public function getPayloadData(): ?StreamInterface
+    public function getPayloadData(): StreamInterface
     {
         return $this->payloadData;
     }
