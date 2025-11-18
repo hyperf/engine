@@ -34,7 +34,7 @@
         "mockery/mockery": "^1.5",
         "phpstan/phpstan": "^1.0",
         "phpunit/phpunit": "^9.4",
-        "swoole/ide-helper": "5.*"
+        "swoole/ide-helper": "dev-master"
     },
     "suggest": {
         "ext-sockets": "*",
