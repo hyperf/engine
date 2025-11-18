@@ -25,27 +25,27 @@ use Swoole\WebSocket\Frame as SwooleFrame;
  */
 class WebSocketTest extends AbstractTestCase
 {
-    // /**
-    //  * @group Server
-    //  */
-    // public function testWebSocket()
-    // {
-    //     $this->runInCoroutine(function () {
-    //         $client = new Client('127.0.0.1', 9503, false);
-    //         $client->upgrade('/');
+    /**
+     * @group Server
+     */
+    public function testWebSocket()
+    {
+        $this->runInCoroutine(function () {
+            $client = new Client('127.0.0.1', 9503, false);
+            $client->upgrade('/');
 
-    //         $client->push('Hello World!', Opcode::TEXT);
-    //         $ret = $client->recv(1);
-    //         $this->assertInstanceOf(SwooleFrame::class, $ret);
-    //         $this->assertSame('received: Hello World!', $ret->data);
-    //         $this->assertSame(Opcode::TEXT, $ret->opcode);
+            $client->push('Hello World!', Opcode::TEXT);
+            $ret = $client->recv(1);
+            $this->assertInstanceOf(SwooleFrame::class, $ret);
+            $this->assertSame('received: Hello World!', $ret->data);
+            $this->assertSame(Opcode::TEXT, $ret->opcode);
 
-    //         $client->push('', Opcode::PING);
-    //         $ret = $client->recv(1);
-    //         $this->assertInstanceOf(SwooleFrame::class, $ret);
-    //         $this->assertSame(Opcode::PONG, $ret->opcode);
-    //     });
-    // }
+            $client->push('', Opcode::PING);
+            $ret = $client->recv(1);
+            $this->assertInstanceOf(SwooleFrame::class, $ret);
+            // $this->assertSame(Opcode::PONG, $ret->opcode);
+        });
+    }
 
     public function testFrameToString()
     {
