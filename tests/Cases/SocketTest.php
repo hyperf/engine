@@ -297,4 +297,29 @@ class SocketTest extends AbstractTestCase
             $server->shutdown();
         });
     }
+
+    public function testSocketGetOption()
+    {
+        $this->runInCoroutine(function () {
+            $server = new Server('0.0.0.0', 9506);
+
+            sleep(1);
+
+            $socket = (new Socket\SocketFactory())->make($option = new Socket\SocketOption('127.0.0.1', 9506, protocol: [
+                'open_length_check' => true,
+                'package_max_length' => 1024 * 1024 * 2,
+                'package_length_type' => 'N',
+                'package_length_offset' => 0,
+                'package_body_offset' => 4,
+            ]));
+
+            $this->assertSame($option, $socket->getSocketOption());
+
+            $socket->close();
+
+            sleep(1);
+
+            $server->shutdown();
+        });
+    }
 }
