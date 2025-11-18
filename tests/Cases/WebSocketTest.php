@@ -41,7 +41,10 @@ class WebSocketTest extends AbstractTestCase
             $this->assertSame(Opcode::TEXT, $ret->opcode);
 
             // $client->push('', Opcode::PING);
-            $client->ping();
+            // $client->ping();
+            $pingFrame = new SwooleFrame();
+            $pingFrame->opcode = WEBSOCKET_OPCODE_PING;
+            $client->push($pingFrame);
             $ret = $client->recv(1);
             $this->assertInstanceOf(SwooleFrame::class, $ret);
             $this->assertSame(Opcode::PONG, $ret->opcode);
