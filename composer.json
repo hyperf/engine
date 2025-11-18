@@ -30,6 +30,7 @@
         "friendsofphp/php-cs-fixer": "^3.0",
         "hyperf/guzzle": "^3.0",
         "hyperf/http-message": "^3.0",
+        "hyperf/laminas-mime": "^3.0",
         "mockery/mockery": "^1.5",
         "phpstan/phpstan": "^1.0",
         "phpunit/phpunit": "^9.4",
