@@ -23,6 +23,7 @@ class SocketFactory implements SocketFactoryInterface
     public function make(SocketOptionInterface $option): SocketInterface
     {
         $socket = new Socket(AF_INET, SOCK_STREAM, 0);
+
         $socket->setSocketOption($option);
 
         if ($protocol = $option->getProtocol()) {
