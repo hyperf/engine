@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace Hyperf\Engine;
 
+use Hyperf\Engine\Contract\Socket\SocketOptionInterface;
 use Hyperf\Engine\Contract\SocketInterface;
 use Hyperf\Engine\Exception\SocketClosedException;
 use Hyperf\Engine\Exception\SocketTimeoutException;
@@ -25,6 +26,8 @@ class SafeSocket implements SocketInterface
 
     protected bool $loop = false;
 
+    protected ?SocketOptionInterface $option = null;
+
     public function __construct(
         protected Socket $socket,
         int $capacity = 65535,
@@ -32,6 +35,16 @@ class SafeSocket implements SocketInterface
         protected ?LoggerInterface $logger = null
     ) {
         $this->channel = new Channel($capacity);
+    }
+
+    public function setSocketOption(SocketOptionInterface $option): void
+    {
+        $this->option = $option;
+    }
+
+    public function getSocketOption(): ?SocketOptionInterface
+    {
+        return $this->option;
     }
 
     /**

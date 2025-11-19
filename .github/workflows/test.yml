@@ -13,11 +13,15 @@ jobs:
     strategy:
       matrix:
         os: [ ubuntu-latest ]
-        php-version: [ '8.1', '8.2', '8.3' ]
-        swoole-version: [ 'v5.0.3', 'v5.1.6', 'v6.0.0', 'master' ]
+        php-version: [ '8.4', '8.3', '8.2', '8.1' ]
+        swoole-version: [ 'v6.1.2', 'v6.0.2', 'v5.1.6', 'v5.0.3', 'master' ]
         exclude:
           - php-version: '8.3'
             swoole-version: 'v5.0.3'
+          - php-version: '8.4'
+            swoole-version: 'v5.0.3'
+          - php-version: '8.4'
+            swoole-version: 'v5.1.6'
       max-parallel: 16
       fail-fast: false
     env:
@@ -52,7 +56,7 @@ jobs:
         run: composer install -o
       - name: Build Docker
         run: |
-          if [ v${{ matrix.php-version }} = 'v8.3' ]
+          if [ v${{ matrix.php-version }} = 'v8.3' ] || [ v${{ matrix.php-version }} = 'v8.4' ];
           then
             docker build . -t swoole:latest --build-arg PHP_VERSION=${{ matrix.php-version }} --build-arg ALPINE_VERSION=vedge
           else
