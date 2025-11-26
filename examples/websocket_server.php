@@ -26,6 +26,8 @@ Coroutine::set([
 
 run(function () {
     $server = new Server('0.0.0.0', 9503, false);
+    $server->set(['open_websocket_ping_frame' => true]);
+
     $server->handle('/', function (Request $request, Response $connection) {
         $socket = new WebSocket($connection, $request);
         $socket->on(WebSocket::ON_CLOSE, static function (Response $connection, int $fd) {

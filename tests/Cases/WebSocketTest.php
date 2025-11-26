@@ -32,6 +32,7 @@ class WebSocketTest extends AbstractTestCase
     {
         $this->runInCoroutine(function () {
             $client = new Client('127.0.0.1', 9503, false);
+            $client->set(['open_websocket_pong_frame' => true]);
             $client->upgrade('/');
 
             $client->push('Hello World!', Opcode::TEXT);
@@ -40,10 +41,12 @@ class WebSocketTest extends AbstractTestCase
             $this->assertSame('received: Hello World!', $ret->data);
             $this->assertSame(Opcode::TEXT, $ret->opcode);
 
-            // $client->push('', Opcode::PING);
-            // $ret = $client->recv(1);
-            // $this->assertInstanceOf(SwooleFrame::class, $ret);
-            // $this->assertSame(Opcode::PONG, $ret->opcode);
+            if (SWOOLE_VERSION_ID > 60102) {
+                $client->push('', Opcode::PING);
+                $ret = $client->recv(1);
+                $this->assertInstanceOf(SwooleFrame::class, $ret);
+                $this->assertSame(Opcode::PONG, $ret->opcode);
+            }
         });
     }
 
