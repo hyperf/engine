@@ -9,11 +9,14 @@ declare(strict_types=1);
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
+use Hyperf\Codec\Json;
 use Hyperf\Contract\StdoutLoggerInterface;
 use Hyperf\Engine\Coroutine;
 use Hyperf\Engine\Http\ServerFactory;
 use Hyperf\Engine\Http\Stream;
 use Hyperf\Engine\ResponseEmitter;
+use Hyperf\HttpMessage\Cookie\Cookie;
+use Hyperf\HttpMessage\Server\Request;
 use Hyperf\HttpMessage\Server\Response;
 use Psr\Http\Message\RequestInterface;
 use Swoole\Http\Response as SwooleResponse;
@@ -35,12 +38,34 @@ $callback = function () {
     $server = (new ServerFactory($logger))->make('0.0.0.0', 9505);
 
     $server->handle(static function (RequestInterface $request, SwooleResponse $response) use ($emitter) {
-        $body = (string) $request->getBody();
-        $ret = 'Hello World.';
-        if ($body) {
-            $ret = 'Received: ' . $body;
-        }
-        $emitter->emit((new Response())->withBody(new Stream($ret)), $response);
+        $path = $request->getUri()->getPath();
+
+        $callback = match ($path) {
+            '/set-cookies' => function (Request $request) {
+                $cookies = $request->getCookieParams();
+                $json = Json::decode((string) $request->getBody());
+
+                $response = new Response();
+                if (! empty($json['id'])) {
+                    $response->setCookie(new Cookie('id', $json['id']));
+                }
+                if (! empty($json['id2'])) {
+                    $response->setCookie(new Cookie('id2', $json['id2']));
+                }
+
+                return $response->withBody(new Stream(Json::encode($cookies)));
+            },
+            default => function (RequestInterface $request) {
+                $body = (string) $request->getBody();
+                $ret = 'Hello World.';
+                if ($body) {
+                    $ret = 'Received: ' . $body;
+                }
+
+                return (new Response())->withBody(new Stream($ret));
+            }
+        };
+        $emitter->emit($callback($request), $response);
     });
 
     $server->start();

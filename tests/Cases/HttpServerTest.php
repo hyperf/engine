@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace HyperfTest\Cases;
 
+use Hyperf\Codec\Json;
 use Hyperf\Engine\Http\Client;
 
 /**
@@ -43,6 +44,32 @@ class HttpServerTest extends AbstractTestCase
             $response = $client->request('POST', '/', contents: 'Hyperf');
             $this->assertSame(200, $response->statusCode);
             $this->assertSame('Received: Hyperf', $response->body);
+        });
+    }
+
+    /**
+     * @group Server
+     */
+    public function testHttpServerCookies()
+    {
+        $this->runInCoroutine(function () {
+            $client = new Client('127.0.0.1', 9505);
+
+            $client->setCookies(['key' => 'value']);
+
+            $response = $client->request('POST', '/set-cookies', ['user_id' => uniqid()], Json::encode(['id' => $id = uniqid()]));
+            $this->assertSame(200, $response->statusCode);
+            $this->assertSame(1, count($response->getHeaders()['set-cookie']));
+            $this->assertStringStartsWith('id=' . $id, $response->getHeaders()['set-cookie'][0]);
+            $json = Json::decode((string) $response->getBody());
+            $this->assertSame(['key' => 'value'], $json);
+
+            $response = $client->request('POST', '/set-cookies', [], Json::encode(['id2' => $id2 = uniqid()]));
+            $this->assertSame(200, $response->statusCode);
+            $this->assertSame(1, count($response->getHeaders()['set-cookie']));
+            $this->assertStringStartsWith('id2=' . $id2, $response->getHeaders()['set-cookie'][0]);
+            $json = Json::decode((string) $response->getBody());
+            $this->assertSame(['key' => 'value', 'id' => $id], $json);
         });
     }
 }
