@@ -70,6 +70,14 @@ class HttpServerTest extends AbstractTestCase
             $this->assertStringStartsWith('id2=' . $id2, $response->getHeaders()['set-cookie'][0]);
             $json = Json::decode((string) $response->getBody());
             $this->assertSame(['key' => 'value', 'id' => $id], $json);
+
+            $client->setCookies([]);
+            $response = $client->request('POST', '/set-cookies', [], Json::encode(['id2' => $id2 = uniqid()]));
+            $this->assertSame(200, $response->statusCode);
+            $this->assertSame(1, count($response->getHeaders()['set-cookie']));
+            $this->assertStringStartsWith('id2=' . $id2, $response->getHeaders()['set-cookie'][0]);
+            $json = Json::decode((string) $response->getBody());
+            $this->assertSame([], $json);
         });
     }
 }
